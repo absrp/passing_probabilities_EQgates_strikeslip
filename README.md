@@ -33,11 +33,11 @@ The subset of the scripts that measure the geometry of earthquake gates from sha
 ### Measuring earthquake gate geometry and estimating passing probabilities
 
 - [ ] To measure the geometry of earthquake gates in a shapefile
-    - [ ] Run the "measure_EQ_gates" Matlab script (must run in directory containing shapefiles)
+    - [ ] Run the "measure_EQgates.m" Matlab script (must run in directory containing shapefiles)
     - [ ] This will output a csv file with the characterized gates
 
 - [ ] To estimate passing probabilities
-    - [ ] Run the "EQ_gates.ipynb" Jupyter Notebook. Requires the csv containing the gate geometries. 
+    - [ ] Run the "analysis_EQgates_probabilities.ipynb" Jupyter Notebook. Requires the csv containing the gate geometries. 
     - [ ] This will output the figures 3 onwards on the manuscript.
 
 <!-- CONTACT -->
