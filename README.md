@@ -30,7 +30,7 @@ The subset of the scripts that measure the geometry of earthquake gates from sha
 
 
 <!-- ROADMAP -->
-### Running the general end-user model
+### Measuring earthquake gate geometry and estimating passing probabilities
 
 - [ ] To measure the geometry of earthquake gates in a shapefile
     - [ ] Run the "measure_EQ_gates" Matlab script (must run in directory containing shapefiles)
