@@ -14,7 +14,7 @@ A set of scripts to estimate the geometry of earthquake gates and passing probab
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-Earthquake gates act as barriers to rupture propagation, where material properties, rupture dynamics, and the availability and geometry of neighboring faults control the probability of throughgoing rupture. We map step-overs, bends, gaps, splays, and strands from the surface ruptures of 31 strike-slip earthquakes at 1:50,000 scale, classifying each population into breached and unbreached groups. We calculate passing probability as a function of geometry for each group. Step-overs, gaps, and single bends halt ruptures more effectively than double bends, and $<$20\% of the ruptures stopped on straight segments. Based on our modeled probabilities, we estimate event likelihood as the joint passing probabilities of breached gates and straight segments along an event's rupture length. Event likelihood decreases with magnitude, where the size and spacing of earthquake gates along ruptures support a barrier model for controlling earthquake magnitude. Our probabilities may be used to validate barrier breaching frequencies in long-term rupture simulators.
+Earthquake gates act as barriers to rupture propagation, where material properties, rupture dynamics, and the availability and geometry of neighboring faults control the probability of throughgoing rupture. We map step-overs, bends, gaps, splays, and strands from the surface ruptures of 31 strike-slip earthquakes at 1:50,000 scale, classifying each population into breached and unbreached groups. We calculate passing probability as a function of geometry for each group. Step-overs, gaps, and single bends halt ruptures more effectively than double bends, and <20% of the ruptures stopped on straight segments. Based on our modeled probabilities, we estimate event likelihood as the joint passing probabilities of breached gates and straight segments along an event's rupture length. Event likelihood decreases with magnitude, where the size and spacing of earthquake gates along ruptures support a barrier model for controlling earthquake magnitude. Our probabilities may be used to validate barrier breaching frequencies in long-term rupture simulators.
 
 
 <!-- GETTING STARTED -->
@@ -35,6 +35,7 @@ The subset of the scripts that measure the geometry of earthquake gates from sha
 - [ ] To measure the geometry of earthquake gates in a shapefile
     - [ ] Run the "measure_EQgates.m" Matlab script (must run in directory containing shapefiles)
     - [ ] This will output a csv file with the characterized gates
+    - [ ] To measure the spacing between earthquake gate, run the "gatespacing.m" script. This script produces a pdf output fitting log-            normal and exponential CDFs to the ECDF of the gate spacings.
 
 - [ ] To estimate passing probabilities
     - [ ] Run the "analysis_EQgates_probabilities.ipynb" Jupyter Notebook. Requires the csv containing the gate geometries. 
@@ -47,7 +48,7 @@ Please report suggestions and issues:
 
 [@_absrp](https://twitter.com/_absrp) - arodriguezpadilla@ucdavis.edu
 
-Project Link: [https://github.com/absrp/PFDHA_strikeslip](https://github.com/absrp/PFDHA_strikeslip)
+Project Link: [https://github.com/absrp/passing_probabilities_EQgates](https://github.com/absrp/passing_probabilities_EQgates)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
