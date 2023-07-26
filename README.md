@@ -52,7 +52,7 @@ Project Link: [https://github.com/absrp/passing_probabilities_EQgates](https://g
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Manuscript Link: * in review, stay tuned *
+Manuscript Link: * to be submitted, stay tuned *
 
 
 
