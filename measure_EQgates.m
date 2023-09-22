@@ -28,6 +28,7 @@ fault_y = [];
 reflines_all = shaperead('_FDHI_FLATFILE_ECS_rev2.shp'); 
 
 %%
+
 for i=1:length(shapefiles)
 % read shapefile
 shapename = shapefiles(i).name;
@@ -63,6 +64,13 @@ end
 % find data associated with select earthquake
 EQ_select = find(strcmp(FDHI_data.eq_name,EQ_name));
 EQ_ID = FDHI_data.EQ_ID(EQ_select);
+
+data = FDHI_data(EQ_select,:);
+epicenter_xall = data.hypocenter_longitude_degrees;
+epicenter_yall = data.hypocenter_latitude_degrees;
+epicenter_x = epicenter_xall(1);
+epicenter_y = epicenter_yall(1);
+
 
 % find ECS lines for select earthquake
 celllines = struct2cell(reflines_all)'; 
@@ -186,9 +194,16 @@ for n = 1:length(maplines)
     total_rupturelength = [total_rupturelength; total_rupturelengthi];
 end 
 
+distance_to_epicenter = [];
+
+for n = 1:length(maplines)
+   [distance_to_epicenteri] = measure_distance_to_epicenter(maplines(n).X,maplines(n).Y,epicenter_x,epicenter_y,zone_n,hem);
+    distance_to_epicenter = [distance_to_epicenter; distance_to_epicenteri];
+end 
+
 %% extract info from the nearest data point near the step-over from the FDHI database
 % subset section of the FDHI for desired earthquake
-data = FDHI_data(EQ_select,:);
+
 SRL_data = readtable('cumulative_displacements.xlsx'); 
 eventSRL = SRL_data.Event;
 
@@ -236,6 +251,7 @@ allresults_i = table(...
     loc_along,...
     total_rupturelength,...
     normalized_loc_along,...
+    distance_to_epicenter,...
     xcheck',...
     ycheck',...
     repelem(string(zone),dimcheck)',...
@@ -271,6 +287,7 @@ all_results.Properties.VariableNames = {'FDHI ID',...
     'Location along rupture',...
     'Total rupture length',...
     'Normalized location',...
+    'Distance to epicenter',...
     'x1check',...
     'y1check',...
     'UTM zone',...
@@ -428,7 +445,7 @@ y_2 = curvexy_y(2:end);
 segment = sqrt((x_1-x_2).^2+(y_1-y_2).^2); % note transformation to local coordinate system 
 total_rupturelength = sum(segment);
 
-spacing = 100;
+spacing = 100; % discretizing rupture into 100 m spaced increments
 pt = interparc(0:(spacing/total_rupturelength):1,curvexy_x,curvexy_y,'linear'); 
 pt_x = pt(:,1);
 pt_y = pt(:,2);
@@ -447,3 +464,22 @@ loc_along= sum(segment);
 
 normalized_loc_along = loc_along/total_rupturelength; 
 end
+function [distance_to_epi] = measure_distance_to_epicenter(fault_x,fault_y,epi_x,epi_y,zone,hem)
+fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
+fault_y = fault_y(~isnan(fault_y));
+
+% hold on
+% scatter(fault_x,fault_y,'b')
+% scatter(epi_x,epi_y,'r')
+% 
+
+[coords_gatex, coordsgatey] = wgs2utm(fault_y(1),fault_x(1),zone,hem);
+coords_gate = [coords_gatex' coordsgatey'];
+
+[hypoxy_x, hypoxy_y] = wgs2utm(epi_y,epi_x,zone,hem);
+hypoxy = [hypoxy_x' hypoxy_y'];
+
+
+[~,distance_to_epi] = dsearchn(hypoxy,coords_gate); % find minimum distance between gate and epicenter
+
+end 

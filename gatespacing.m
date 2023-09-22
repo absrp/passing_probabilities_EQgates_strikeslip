@@ -154,9 +154,15 @@ fittedCDF_exponential = cdf(pd_exponential, x);
 hold on;
 plot(x, 1-fittedCDF_lognormal, 'Color',[0.6353    0.0784    0.1843], 'LineWidth', 2);  % Fitted log-normal CDF
 plot(x, 1-fittedCDF_exponential, 'k', 'LineWidth', 2);  % Fitted exponential CDF
-hold off;
+
 legend('Empirical CDF', 'Fitted log-normal CDF', 'Fitted exponential CDF');
 
+% CDF gamma
+% params = gamfit(dist');
+% gamma_cdf = gamcdf(x, params(1), params(2)); % Use the estimated parameters
+% gamma_cdf_plot = plot(x, 1-gamma_cdf, 'Color', 'b', 'LineWidth', 2);
+
+legend('Empirical CDF', 'Fitted log-normal CDF', 'Fitted exponential CDF');
 saveas(gcf,'a_lognormal_exp_CDF.pdf')
 
     
