@@ -40,7 +40,7 @@ The subset of the scripts that measure the geometry of earthquake gates from sha
 - [ ] To estimate passing probabilities and event likelihood
     - [ ] Run the "analysis_EQgates_probabilities.ipynb" Jupyter Notebook. Requires the csv containing the gate geometries.
     - [ ] This script estimates passing probability as a function of geometry and event likelihood
-    - [ ] This will output the figures 2, 3, and 4 on the manuscript.
+    - [ ] This will output the figures in the manuscript.
 
 
 <!-- CONTACT -->
