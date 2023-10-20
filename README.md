@@ -22,7 +22,7 @@ Earthquake gates act as barriers to rupture propagation, where material properti
 
 This repository contains the scripts and data required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of earthquake gates. 
 
-The data for running this analysis are stored in a separate repository that is also open-access (). All figures in the manuscript can be generated using these scripts and data. 
+The shapefiles of each earthquake gate for each event are stored in a separate repository that can be accessed at https://drive.google.com/drive/u/0/folders/1GZL5kqn9kKKY6fmEznIuAZKOC3qZirCe. All figures in the manuscript can be generated using these scripts and data. The surface rupture maps we map from and the ECS line for each event can be accessed from the FDHI database appendices.
 
 ### Prerequisites
 
