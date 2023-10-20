@@ -8,10 +8,10 @@
 % info from FDHI appendix 'data_FDHI.xlsx'
 
 % required functions (available from Mathworks in links below): 
-% function wsg2utm (version 2) https://www.mathworks.com/matlabcentral/fileexchange/14804-wgs2utm-version-2
+% function wsg2utm (version 2) https://www.mathzworks.com/matlabcentral/fileexchange/14804-wgs2utm-version-2
 % function distance2curve https://www.mathworks.com/matlabcentral/fileexchange/34869-distance2curve#:~:text=Distance2curve%20allows%20you%20to%20specify,and%20the%20closest%20point%20identified.
 
-clear; close all
+clear; close all;
 
 % import FDHI data
 FDHI_data = readtable('data_FDHI.xlsx');
@@ -64,10 +64,12 @@ end
 % find data associated with select earthquake
 EQ_select = find(strcmp(FDHI_data.eq_name,EQ_name));
 EQ_ID = FDHI_data.EQ_ID(EQ_select);
-
 data = FDHI_data(EQ_select,:);
 epicenter_xall = data.hypocenter_longitude_degrees;
 epicenter_yall = data.hypocenter_latitude_degrees;
+coordsx = data.longitude_degrees;
+coordsy = data.latitude_degrees;
+slip = data.recommended_net_preferred_for_analysis_meters;
 epicenter_x = epicenter_xall(1);
 epicenter_y = epicenter_yall(1);
 
@@ -186,6 +188,7 @@ dimcheck = dimcheck(:,1);
 loc_along = [];
 normalized_loc_along = [];
 total_rupturelength = [];
+distance_to_slipmax = [];
 
 for n = 1:length(maplines)
    [total_rupturelengthi,loc_alongi,normalized_loc_alongi] = measure_location_along_rupture(maplines(n).X,maplines(n).Y,reflines.X,reflines.Y,zone_n,hem);
@@ -201,6 +204,12 @@ for n = 1:length(maplines)
     distance_to_epicenter = [distance_to_epicenter; distance_to_epicenteri];
 end 
 
+for n = 1:length(maplines)
+    [distance_to_slipmaxi] = measure_distance_to_slipmax(maplines(n).X,maplines(n).Y,coordsx,coordsy,slip,zone_n,hem);
+    distance_to_slipmax = [distance_to_slipmax; distance_to_slipmaxi];
+end 
+
+
 %% extract info from the nearest data point near the step-over from the FDHI database
 % subset section of the FDHI for desired earthquake
 
@@ -209,11 +218,9 @@ eventSRL = SRL_data.Event;
 
 idxSRL = find(strcmp(eventSRL,EQ_name));
 if isempty(idxSRL)
-    disp(EQ_name)
     error('Earthquake name not in SRL database')
 else 
 end
-
 
 Cumdisp = SRL_data.CumulativeDisplacement_km_(idxSRL); 
 slip = data.fps_central_meters;
@@ -252,6 +259,7 @@ allresults_i = table(...
     total_rupturelength,...
     normalized_loc_along,...
     distance_to_epicenter,...
+    distance_to_slipmax,...
     xcheck',...
     ycheck',...
     repelem(string(zone),dimcheck)',...
@@ -288,6 +296,7 @@ all_results.Properties.VariableNames = {'FDHI ID',...
     'Total rupture length',...
     'Normalized location',...
     'Distance to epicenter',...
+    'Distance to max slip',...
     'x1check',...
     'y1check',...
     'UTM zone',...
@@ -340,8 +349,20 @@ elseif strcmp(shapefile_type,'bend') % check if shapefile type is a bend
         L=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
         L = rad2deg(L);
         measurement_type_line = 'angle'; % double bend
+
+        % angle b test 
+        v1=[fault_x(3),fault_y(3)]-[fault_x(2),fault_y(2)];
+        v2=[fault_x(4),fault_y(4)]-[fault_x(3),fault_y(3)];
+        angb=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
+        angb = rad2deg(angb);
+        if L-angb>10
+            disp(L-angb)
+        else
+            L = L;
+        end
         
     else 
+        disp(length(fault_x))
     error('Bends must contain three or four x,y coordinate pairs')
     end
         
@@ -445,7 +466,7 @@ y_2 = curvexy_y(2:end);
 segment = sqrt((x_1-x_2).^2+(y_1-y_2).^2); % note transformation to local coordinate system 
 total_rupturelength = sum(segment);
 
-spacing = 100; % discretizing rupture into 100 m spaced increments
+spacing = 100; % discretizing rupture into 100 m spaced increments to resample
 pt = interparc(0:(spacing/total_rupturelength):1,curvexy_x,curvexy_y,'linear'); 
 pt_x = pt(:,1);
 pt_y = pt(:,2);
@@ -465,6 +486,8 @@ loc_along= sum(segment);
 normalized_loc_along = loc_along/total_rupturelength; 
 end
 function [distance_to_epi] = measure_distance_to_epicenter(fault_x,fault_y,epi_x,epi_y,zone,hem)
+
+
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
 fault_y = fault_y(~isnan(fault_y));
 
@@ -481,5 +504,28 @@ hypoxy = [hypoxy_x' hypoxy_y'];
 
 
 [~,distance_to_epi] = dsearchn(hypoxy,coords_gate); % find minimum distance between gate and epicenter
+
+end 
+function [distance_to_slipmax] = measure_distance_to_slipmax(fault_x,fault_y,coords_x,coords_y,slip,zone,hem)
+% find location of maximum displacement
+[coordsx_slip,coordsy_slip] = wgs2utm(coords_y,coords_x,zone,hem);
+
+fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
+fault_y = fault_y(~isnan(fault_y));
+[coords_gatex, coordsgatey] = wgs2utm(fault_y(1),fault_x(1),zone,hem);
+idxmax = find(slip==max(slip));
+if idxmax>2
+    idxmax = idxmax(1);
+end 
+
+locx_maxslip = coordsx_slip(idxmax);
+locy_maxslip = coordsy_slip(idxmax);
+
+% measure distance between gate and coordinates of maximum slip
+coordsgate = [coords_gatex coordsgatey];
+coordsslip = [locx_maxslip locy_maxslip];
+%coords_measure = [coordsgate; coordsslip];
+[~,distance_to_slipmax] = dsearchn(coordsgate,coordsslip);
+%distance_to_slipmax = pdist(coords_measure);
 
 end 

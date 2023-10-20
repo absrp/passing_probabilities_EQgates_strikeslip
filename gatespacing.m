@@ -1,5 +1,5 @@
 %% this script calculates the distance between the centroid of each earthquake gate and the distance to the nearest neighbor gate in each side
-clear all; close all 
+ clear all; close all 
 % per event: 
 % step 1: load shapefiles
 % step 2: select shapefiles for event
@@ -12,6 +12,7 @@ shapefile_names = {};
 shapefile_type = {};
 shapefile_BU = {};
 shapefile_event = {};
+
 
 for n=1:numel(shapefiles)
     shapefile_namesi = shapefiles(n).name; 
@@ -112,6 +113,18 @@ end
             
             centroidx = [centroidx; centroidxi];
             centroidy = [centroidy; centroidyi];
+
+            %debugging 
+            
+            % differences = abs(culprit - centroidxi);
+            % 
+            %     for b=1:length(differences)
+            %     if differences(b)<0.0001
+            %         disp(selected(p))
+            %     else 
+            %     end
+            % end
+            
         end
         
 
@@ -127,7 +140,14 @@ end
         centroidsx_subset = centroidx(1:end ~= idxrem);
         centroidsy_subset = centroidy(1:end ~= idxrem);
         [k,dist(c)] = dsearchn([centroidsx_subset,centroidsy_subset],[centroidx(c), centroidy(c)]);
-        
+
+        if dist(c)>10^6
+            disp(centroidx(c))
+            disp(centroidy(c))
+            culprit = centroidx(c);
+        else
+        end
+
     end
 
     figure
@@ -136,14 +156,13 @@ end
     ylabel('Frequency')
     set(gca,'FontSize',14)
   
-    
    
-    %% ECDF
+%% ECDF
 [F, X] = ecdf(dist);
 plot(X, 1-F,'Color',[0.8 0.8 0.8],'linewidth',2);
 xlabel('Distance to nearest neighbor (m)');
 ylabel('1 - Cumulative Probability');
-set(gca,'XScale','log')
+set(gca,'XScale','log','FontSize',14)
 
 % CDFs (log normal and exponential)
 pd_lognormal = fitdist(dist', 'LogNormal');
