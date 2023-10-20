@@ -14,7 +14,7 @@ A set of scripts to estimate the geometry of earthquake gates and passing probab
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-Earthquake gates act as barriers to rupture propagation, where material properties, rupture dynamics, and the availability and geometry of neighboring faults control the probability of throughgoing rupture. We map step-overs, bends, gaps, splays, and strands from the surface ruptures of 31 strike-slip earthquakes at 1:50,000 scale, classifying each population into breached and unbreached groups. We calculate passing probability as a function of geometry for each group. Step-overs, gaps, and single bends halt ruptures more effectively than double bends, and <20% of the ruptures stopped on straight segments. Based on our modeled probabilities, we estimate event likelihood as the joint passing probabilities of breached gates and straight segments along an event's rupture length. Event likelihood decreases with magnitude, where the size and spacing of earthquake gates along ruptures support a barrier model for controlling earthquake magnitude. Our probabilities may be used to validate barrier breaching frequencies in long-term rupture simulators.
+Earthquake magnitude is controlled by the rupture area of the fault network hosting the event. For surface-rupturing large strike-slip earthquakes (~MW6+), ruptures must overcome zones of geometrical complexity along fault networks. These zones, or earthquake gates, act as barriers to rupture propagation. We map step-overs, bends, gaps, splays, and strands from the surface ruptures of 31 strike-slip earthquakes, classifying each population into breached and unbreached groups. We calculate passing probability as a function of geometry for each group. Step-overs, and single bends halt ruptures more effectively than double bends and gaps, and ~20% of ruptures terminate on straight segments. Based on our modeled probabilities, we estimate event likelihood as the joint passing probabilities of breached gates and straight segments along a rupture. Event likelihood decreases inversely with  rupture length squared. Our findings support a barrier model as a factor in limiting large earthquake size. 
 
 
 <!-- GETTING STARTED -->
@@ -22,7 +22,7 @@ Earthquake gates act as barriers to rupture propagation, where material properti
 
 This repository contains the scripts and data required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of earthquake gates. 
 
-The shapefiles of each earthquake gate for each event are stored in a separate repository that can be accessed at https://drive.google.com/drive/u/0/folders/1GZL5kqn9kKKY6fmEznIuAZKOC3qZirCe. All figures in the manuscript can be generated using these scripts and data. The surface rupture maps we map from and the ECS line for each event can be accessed from the FDHI database appendices.
+The shapefiles of each earthquake gate for each event are stored in a separate repository that can be accessed at https://drive.google.com/drive/u/0/folders/1GZL5kqn9kKKY6fmEznIuAZKOC3qZirCe. All figures in the manuscript can be generated using these scripts and data. The surface rupture maps we map from and the ECS line for each event can be accessed from the FDHI database appendices (Sarmiento et al., 2021).
 
 ### Prerequisites
 
