@@ -1,4 +1,4 @@
-# passing_probabilities_EQgates
+# The passing probabilities of earthquake gates and their effect in surface rupture length
 A set of scripts to estimate the geometry of earthquake gates and passing probabilities as a function of geometry
 
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
