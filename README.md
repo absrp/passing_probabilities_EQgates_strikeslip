@@ -14,7 +14,7 @@ A set of scripts to estimate the geometry of earthquake gates and passing probab
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-Earthquake magnitude is controlled by the rupture area of the fault network hosting the event. For surface-rupturing large strike-slip earthquakes (~MW6+), ruptures must overcome zones of geometrical complexity along fault networks. These zones, or earthquake gates, act as barriers to rupture propagation. We map step-overs, bends, gaps, splays, and strands from the surface ruptures of 31 strike-slip earthquakes, classifying each population into breached and unbreached groups. We calculate passing probability as a function of geometry for each group. Step-overs, and single bends halt ruptures more effectively than double bends and gaps, and ~20% of ruptures terminate on straight segments. Based on our modeled probabilities, we estimate event likelihood as the joint passing probabilities of breached gates and straight segments along a rupture. Event likelihood decreases inversely with  rupture length squared. Our findings support a barrier model as a factor in limiting large earthquake size. 
+Earthquake magnitude is controlled by the rupture area of the fault network hosting the event. For surface-rupturing large strike-slip earthquakes (~MW6+), ruptures must overcome zones of geometrical complexity along fault networks. These zones, or earthquake gates, act as barriers to rupture propagation. We map step-overs, bends, gaps, splays, and strands from the surface ruptures of 31 strike-slip earthquakes, classifying each population into breached and unbreached groups. We develop a statistical model for passing probability as a function of geometry for each group. Step-overs, and single bends are more predictable earthquake gates than double bends and gaps, and ~20% of ruptures terminate on straight segments. Based on our modeled probabilities, we estimate event likelihood as the joint passing probabilities of breached gates and straight segments along a rupture. Event likelihood decreases inversely with  rupture length squared. Our findings support a barrier model as a factor in limiting large earthquake size.
 
 
 <!-- GETTING STARTED -->
@@ -48,7 +48,7 @@ The subset of the scripts that measure the geometry of earthquake gates from sha
 
 Please report suggestions and issues:
 
-[@_absrp](https://twitter.com/_absrp) - arodriguezpadilla@ucdavis.edu
+[@_absrp](https://twitter.com/_absrp) - alba@caltech.edu
 
 Project Link: [https://github.com/absrp/passing_probabilities_EQgates](https://github.com/absrp/passing_probabilities_EQgates)
 
