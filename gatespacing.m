@@ -159,7 +159,7 @@ end
    
 %% ECDF
 [F, X] = ecdf(dist);
-plot(X, 1-F,'Color',[0.8 0.8 0.8],'linewidth',2);
+plot(X, 1-F,'Color','k','linewidth',2);
 xlabel('Distance to nearest neighbor (m)');
 ylabel('1 - Cumulative Probability');
 set(gca,'XScale','log','FontSize',14)
@@ -171,8 +171,8 @@ x = linspace(min(dist),max(dist),10000);
 fittedCDF_lognormal = cdf(pd_lognormal, x);
 fittedCDF_exponential = cdf(pd_exponential, x);
 hold on;
-plot(x, 1-fittedCDF_lognormal, 'Color',[0.6353    0.0784    0.1843], 'LineWidth', 2);  % Fitted log-normal CDF
-plot(x, 1-fittedCDF_exponential, 'k', 'LineWidth', 2);  % Fitted exponential CDF
+plot(x, 1-fittedCDF_lognormal, 'Color',[0.8510    0.3255    0.0980], 'LineWidth', 2);  % Fitted log-normal CDF
+plot(x, 1-fittedCDF_exponential, 'Color',[0.4667    0.6745    0.1882], 'LineWidth', 2);  % Fitted exponential CDF
 
 legend('Empirical CDF', 'Fitted log-normal CDF', 'Fitted exponential CDF');
 
