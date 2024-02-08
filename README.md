@@ -22,7 +22,7 @@ Earthquake magnitude is controlled by the rupture area of the fault network host
 
 This repository contains the scripts and data required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of earthquake gates. 
 
-The shapefiles of each earthquake gate for each event are stored in a separate repository that can be accessed at https://drive.google.com/drive/u/0/folders/1GZL5kqn9kKKY6fmEznIuAZKOC3qZirCe. All figures in the manuscript can be generated using these scripts and data. The surface rupture maps we map from and the ECS line for each event can be accessed from the FDHI database appendices (Sarmiento et al., 2021). The sources for the reference regional maps is provided in the appendix of Rodriguez Padilla et al. 202X.
+The shapefiles of each earthquake gate for each event are stored in a separate repository that can be accessed at https://drive.google.com/drive/u/0/folders/1GZL5kqn9kKKY6fmEznIuAZKOC3qZirCe. All figures in the manuscript can be generated using these scripts and data. The surface rupture maps we map from, the ECS line for each event, and the displacement data for each event, can be accessed from the FDHI database appendices (Sarmiento et al., 2021). The sources for the reference regional maps is provided in the appendix of Rodriguez Padilla et al. 202X.
 
 ### Prerequisites
 
