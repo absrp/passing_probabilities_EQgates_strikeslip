@@ -209,6 +209,15 @@ for n = 1:length(maplines)
     distance_to_slipmax = [distance_to_slipmax; distance_to_slipmaxi];
 end 
 
+slip_at_gate = [];
+normalized_slip_at_gate = [];
+
+for n = 1:length(maplines)
+    [slip_at_gatei,normalized_slip_at_gatei] = find_slip_at_gate(maplines(n).X,maplines(n).Y,coordsx,coordsy,slip,zone_n,hem,shapefile_type);
+    slip_at_gate = [slip_at_gate; slip_at_gatei];
+    normalized_slip_at_gate = [normalized_slip_at_gate; normalized_slip_at_gatei];
+end
+
 
 %% extract info from the nearest data point near the step-over from the FDHI database
 % subset section of the FDHI for desired earthquake
@@ -260,6 +269,8 @@ allresults_i = table(...
     normalized_loc_along,...
     distance_to_epicenter,...
     distance_to_slipmax,...
+    slip_at_gate,...
+    normalized_slip_at_gate,...
     xcheck',...
     ycheck',...
     repelem(string(zone),dimcheck)',...
@@ -297,6 +308,8 @@ all_results.Properties.VariableNames = {'FDHI ID',...
     'Normalized location',...
     'Distance to epicenter',...
     'Distance to max slip',...
+    'Slip at gate (m)',...
+    'Normalized slip at gate',...
     'x1check',...
     'y1check',...
     'UTM zone',...
@@ -466,7 +479,7 @@ y_2 = curvexy_y(2:end);
 segment = sqrt((x_1-x_2).^2+(y_1-y_2).^2); % note transformation to local coordinate system 
 total_rupturelength = sum(segment);
 
-spacing = 100; % discretizing rupture into 100 m spaced increments to resample
+spacing = 10; % discretizing rupture into 10 m spaced increments to resample
 pt = interparc(0:(spacing/total_rupturelength):1,curvexy_x,curvexy_y,'linear'); 
 pt_x = pt(:,1);
 pt_y = pt(:,2);
@@ -507,6 +520,7 @@ hypoxy = [hypoxy_x' hypoxy_y'];
 
 end 
 function [distance_to_slipmax] = measure_distance_to_slipmax(fault_x,fault_y,coords_x,coords_y,slip,zone,hem)
+
 % find location of maximum displacement
 [coordsx_slip,coordsy_slip] = wgs2utm(coords_y,coords_x,zone,hem);
 
@@ -529,3 +543,44 @@ coordsslip = [locx_maxslip locy_maxslip];
 %distance_to_slipmax = pdist(coords_measure);
 
 end 
+function [slip_at_gate,normalized_slip_at_gate] = find_slip_at_gate(fault_x,fault_y,coords_x,coords_y,slip,zone,hem,type)
+% find location of all slip displacements
+[coordsx_slip,coordsy_slip] = wgs2utm(coords_y,coords_x,zone,hem);
+slip_nonzero =  find(slip>0);
+coordsx_slip = coordsx_slip(slip_nonzero);
+coordsy_slip = coordsy_slip(slip_nonzero);
+slip = slip(slip_nonzero);
+
+
+% find location of gate
+fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
+fault_y = fault_y(~isnan(fault_y));
+[coords_gatex, coordsgatey] = wgs2utm(fault_y(1),fault_x(1),zone,hem);
+
+% measure distance between gate and each slip point 
+coordsgate = [coords_gatex coordsgatey];
+coordsslip = [coordsx_slip coordsy_slip];
+[~,distance_to_slip] = dsearchn(coordsgate,coordsslip);
+
+if strcmp(type,'bend')
+    radius = 500;
+else 
+    radius = 500;
+end
+
+idx_rad = find(distance_to_slip<radius);
+
+if length(idx_rad)>1
+    slip_rad = slip(idx_rad);
+    slip_at_gate = mean(slip_rad); 
+
+    % normalize slip at gate
+    max_slip = max(slip); 
+    normalized_slip_at_gate = slip_at_gate/max_slip; 
+
+else
+    slip_at_gate = NaN;
+    normalized_slip_at_gate = NaN;
+
+end 
+end
