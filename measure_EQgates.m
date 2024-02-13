@@ -27,7 +27,7 @@ fault_y = [];
 
 reflines_all = shaperead('_FDHI_FLATFILE_ECS_rev2.shp'); 
 
-%%
+%% populate spreadsheet with geometry and other information
 
 for i=1:length(shapefiles)
 % read shapefile
@@ -74,19 +74,17 @@ epicenter_x = epicenter_xall(1);
 epicenter_y = epicenter_yall(1);
 
 
-% find ECS lines for select earthquake
+% find ECS line for select earthquake
 celllines = struct2cell(reflines_all)'; 
 reflinesloc = find(cell2mat(celllines(:,5)) == EQ_ID(1)); 
 reflines = reflines_all(reflinesloc);
 
 %% measure length of maplines (i.e. gap and step-over length) from shapefile)
-L_line = []; %create vector to store length data
+L_line = []; % create vector to store geometry data
 measurement_type_line = {}; 
-
-% measure the line or angle of each mapped feature (gap, step-over, bend splay)
 data = FDHI_data(EQ_select,:);
 
-% utm zone
+% extract utm zone from FDHI database
 zone = data.zone;
 zone = zone{1};
 
@@ -138,7 +136,7 @@ distance = [];
 type_bend = {};
 spacing = [];
 
-% save double bend arm distance and step-over proxy distance
+% save double bend length and step-over proxy width
 
 for n = 1:length(maplines) 
     if isfield(maplines(n),'distance')
@@ -219,19 +217,19 @@ for n = 1:length(maplines)
 end
 
 
-%% extract info from the nearest data point near the step-over from the FDHI database
-% subset section of the FDHI for desired earthquake
+%% extract info from the nearest data point near the earthquake gate from the FDHI database
+% subset section of the FDHI database for desired earthquake
 
-SRL_data = readtable('cumulative_displacements.xlsx'); 
-eventSRL = SRL_data.Event;
+% SRL_data = readtable('cumulative_displacements.xlsx'); 
+% eventSRL = SRL_data.Event;
+% 
+% idxSRL = find(strcmp(eventSRL,EQ_name));
+% if isempty(idxSRL)
+%     error('Earthquake name not in SRL database')
+% else 
+% end
 
-idxSRL = find(strcmp(eventSRL,EQ_name));
-if isempty(idxSRL)
-    error('Earthquake name not in SRL database')
-else 
-end
-
-Cumdisp = SRL_data.CumulativeDisplacement_km_(idxSRL); 
+% Cumdisp = SRL_data.CumulativeDisplacement_km_(idxSRL); 
 slip = data.fps_central_meters;
 magnitude = data.magnitude;
 fault_zone_width = data.fzw_central_meters;
@@ -252,7 +250,6 @@ allresults_i = table(...
     repelem(string(EQ_name),dimcheck)',...
     repelem(date(1),dimcheck)', ...
     repelem(magnitude(1),dimcheck)', ...
-    repelem(Cumdisp,dimcheck)',...
     repelem(EQ_style(1),dimcheck)',...
     repelem(hypo_lat(1),dimcheck)',...
     repelem(hypo_lon(1),dimcheck)',...
@@ -268,14 +265,9 @@ allresults_i = table(...
     total_rupturelength,...
     normalized_loc_along,...
     distance_to_epicenter,...
-    distance_to_slipmax,...
     slip_at_gate,...
     normalized_slip_at_gate,...
-    xcheck',...
-    ycheck',...
-    repelem(string(zone),dimcheck)',...
-    latcheck',...
-    loncheck');
+    repelem(string(zone),dimcheck)');
 
 all_results = [all_results; allresults_i];
 
@@ -291,7 +283,6 @@ all_results.Properties.VariableNames = {'FDHI ID',...
     'Earthquake',...
     'Date',...
     'Magnitude',...
-    'Cumulative displacement',...
     'Style',...
     'Hypocenter lat',...
     'Hypocenter lon',...
@@ -307,17 +298,12 @@ all_results.Properties.VariableNames = {'FDHI ID',...
     'Total rupture length',...
     'Normalized location',...
     'Distance to epicenter',...
-    'Distance to max slip',...
     'Slip at gate (m)',...
     'Normalized slip at gate',...
-    'x1check',...
-    'y1check',...
-    'UTM zone',...
-    'latcheck',...
-    'loncheck'};
+    'UTM zone'};
 
 % export file as csv 
-writetable(all_results,'EQgate_geometries.csv'); 
+writetable(all_results,'aEQgate_geometries.csv'); 
 
 %% function dumpster
 % functions that are called in the script go here 
@@ -355,7 +341,11 @@ elseif strcmp(shapefile_type,'bend') % check if shapefile type is a bend
         L=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
         L = rad2deg(L);
         measurement_type_line = 'angle'; % single bend
-
+        if L>90
+            L = 180-L;
+        else
+            L = L;
+        end
     elseif length(fault_x) == 4
         v1=[fault_x(2),fault_y(2)]-[fault_x(1),fault_y(1)];
         v2=[fault_x(3),fault_y(3)]-[fault_x(2),fault_y(2)];
@@ -369,7 +359,7 @@ elseif strcmp(shapefile_type,'bend') % check if shapefile type is a bend
         angb=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
         angb = rad2deg(angb);
         if L-angb>10
-            disp(L-angb)
+            disp(L-angb);
         else
             L = L;
         end
@@ -377,6 +367,7 @@ elseif strcmp(shapefile_type,'bend') % check if shapefile type is a bend
     else 
         disp(length(fault_x))
     error('Bends must contain three or four x,y coordinate pairs')
+
     end
         
 elseif strcmp(shapefile_type,'stepover') % check if shapefile type is a step-over
@@ -555,24 +546,29 @@ slip = slip(slip_nonzero);
 % find location of gate
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
 fault_y = fault_y(~isnan(fault_y));
-[coords_gatex, coordsgatey] = wgs2utm(fault_y(1),fault_x(1),zone,hem);
+[coords_gatex, coords_gatey] = wgs2utm(fault_y,fault_x,zone,hem);
 
 % measure distance between gate and each slip point 
-coordsgate = [coords_gatex coordsgatey];
+coordsgate = [coords_gatex' coords_gatey'];
 coordsslip = [coordsx_slip coordsy_slip];
-[~,distance_to_slip] = dsearchn(coordsgate,coordsslip);
 
-if strcmp(type,'bend')
-    radius = 500;
-else 
-    radius = 500;
+distance_to_slip = [];
+idx = [];
+slip_in_radius = [];
+radius = 500;
+
+
+for gatept=1:length(coords_gatex)
+    [~,distance_to_slipi] = dsearchn(coordsgate(gatept,:),coordsslip);
+    distance_to_slip = [distance_to_slip; distance_to_slipi'];
+    idx_radius = find(distance_to_slipi<radius);
+    slip_in_radiusi = distance_to_slipi(idx_radius);
+    slip_in_radius = [slip_in_radius; slip_in_radiusi];
 end
 
-idx_rad = find(distance_to_slip<radius);
 
-if length(idx_rad)>1
-    slip_rad = slip(idx_rad);
-    slip_at_gate = mean(slip_rad); 
+if length(slip_in_radius)>1
+    slip_at_gate = mean(slip_in_radius); 
 
     % normalize slip at gate
     max_slip = max(slip); 
