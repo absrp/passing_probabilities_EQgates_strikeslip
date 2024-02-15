@@ -73,7 +73,6 @@ slip = data.recommended_net_preferred_for_analysis_meters;
 epicenter_x = epicenter_xall(1);
 epicenter_y = epicenter_yall(1);
 
-
 % find ECS line for select earthquake
 celllines = struct2cell(reflines_all)'; 
 reflinesloc = find(cell2mat(celllines(:,5)) == EQ_ID(1)); 
@@ -230,12 +229,13 @@ end
 % end
 
 % Cumdisp = SRL_data.CumulativeDisplacement_km_(idxSRL); 
-slip = data.fps_central_meters;
+
+% slip = data.fps_central_meters;
 magnitude = data.magnitude;
-fault_zone_width = data.fzw_central_meters;
-lithology = data.geology;
-coordsx = data.longitude_degrees;
-coordsy = data.latitude_degrees; 
+% fault_zone_width = data.fzw_central_meters;
+% lithology = data.geology;
+% coordsx = data.longitude_degrees;
+% coordsy = data.latitude_degrees; 
 date = data.eq_date;
 hypo_lat = data.hypocenter_latitude_degrees;
 hypo_lon = data.hypocenter_longitude_degrees;
@@ -343,6 +343,10 @@ elseif strcmp(shapefile_type,'bend') % check if shapefile type is a bend
         measurement_type_line = 'angle'; % single bend
         if L>90
             L = 180-L;
+        elseif L>180
+            error('Angle larger than 180')
+        elseif L<0
+            error('Angle smaller than 0')
         else
             L = L;
         end
@@ -534,14 +538,13 @@ coordsslip = [locx_maxslip locy_maxslip];
 %distance_to_slipmax = pdist(coords_measure);
 
 end 
-function [slip_at_gate,normalized_slip_at_gate] = find_slip_at_gate(fault_x,fault_y,coords_x,coords_y,slip,zone,hem,type)
+function [slip_at_gate,normalized_slip_at_gate] = find_slip_at_gate(fault_x,fault_y,coords_x,coords_y,slip,zone,hem,feature)
 % find location of all slip displacements
 [coordsx_slip,coordsy_slip] = wgs2utm(coords_y,coords_x,zone,hem);
 slip_nonzero =  find(slip>0);
 coordsx_slip = coordsx_slip(slip_nonzero);
 coordsy_slip = coordsy_slip(slip_nonzero);
 slip = slip(slip_nonzero);
-
 
 % find location of gate
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
@@ -557,19 +560,39 @@ idx = [];
 slip_in_radius = [];
 radius = 500;
 
+% from middle point of bend 
+if strcmp(feature,'bend')
+    if length(coords_gatex) == 3 % single bend
+    [~,distance_to_slipi] = dsearchn(coordsgate(2,:),coordsslip);
+    distance_to_slip = [distance_to_slip; distance_to_slipi'];
+    idx_radius = find(distance_to_slipi<radius);
+    slip_in_radiusi = slip(idx_radius);
+    slip_in_radius = [slip_in_radius; slip_in_radiusi];
+
+    elseif length(coords_gatex) == 4 % double bend
+    [~,distance_to_slipi] = dsearchn(coordsgate(2:3,:),coordsslip);
+    distance_to_slip = [distance_to_slip; distance_to_slipi'];
+    idx_radius = find(distance_to_slipi<radius);
+    slip_in_radiusi = slip(idx_radius);
+    slip_in_radius = [slip_in_radius; slip_in_radiusi];
+
+    else 
+        error('Length of bend vector must be 3 or 4 elements')
+    end
+
+else % all other features
 
 for gatept=1:length(coords_gatex)
     [~,distance_to_slipi] = dsearchn(coordsgate(gatept,:),coordsslip);
     distance_to_slip = [distance_to_slip; distance_to_slipi'];
     idx_radius = find(distance_to_slipi<radius);
-    slip_in_radiusi = distance_to_slipi(idx_radius);
+    slip_in_radiusi = slip(idx_radius);
     slip_in_radius = [slip_in_radius; slip_in_radiusi];
 end
-
+end 
 
 if length(slip_in_radius)>1
     slip_at_gate = mean(slip_in_radius); 
-
     % normalize slip at gate
     max_slip = max(slip); 
     normalized_slip_at_gate = slip_at_gate/max_slip; 
@@ -577,6 +600,8 @@ if length(slip_in_radius)>1
 else
     slip_at_gate = NaN;
     normalized_slip_at_gate = NaN;
-
 end 
+
+
+
 end
