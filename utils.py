@@ -13,6 +13,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 warnings.filterwarnings('ignore')
 import matplotlib.colors as mcolors
 from scipy.stats import lognorm
+from scipy.stats import expon
 from scipy.stats import bootstrap
 from sklearn.utils import resample
 
@@ -391,7 +392,7 @@ def build_cdf_lognorm(grouped, groupid, stress_typeYN, length_or_angle, colorB, 
     sns.ecdfplot(sortB,c=colorB,label=labelB,ax=axesid) 
     axesid.set_xlabel(xlabel)
 
-    # log normal fit breached
+    # log normal fit 
     yvals = np.arange(len(sortB)) / float(len(sortB)-1)
     shape, loc, scale = lognorm.fit(sortB, floc=0, f0=1-yvals[-1])
     xvals = np.linspace(min(sortB), max(sortB), 100)
@@ -411,6 +412,27 @@ def build_cdf_lognorm(grouped, groupid, stress_typeYN, length_or_angle, colorB, 
     else: 
         sns.ecdfplot(sortU,c=colorU,label=labelU,ax=axesid)
         axesid.plot(xvals, cdf_fitted, color=colorU,linestyle=':') 
+    
+    # exponential fit
+    # yvals = np.arange(len(sortB)) / float(len(sortB)-1)
+    # loc, scale = expon.fit(sortB, floc=0)
+    # xvals = np.linspace(min(sortB), max(sortB), 100)
+    # cdf_fitted = expon.cdf(xvals, loc, scale)
+    # axesid.plot(xvals, cdf_fitted, color=colorB,linestyle='--')  
+
+    # sortU = np.sort(xvals_U)
+    # yvals = np.arange(len(sortU)) / float(len(sortU)-1)
+    # loc, scale = expon.fit(sortU, floc=0)
+    # xvals = np.linspace(min(sortU), max(sortU), 100)
+    # cdf_fitted = expon.cdf(xvals, loc, scale)
+
+    # if max(xvals)>90:
+    #     sns.ecdfplot(sortU,c=colorU,label=labelU,ax=axesid)
+    #     axesid.plot(xvals, cdf_fitted, color=colorU,linestyle='--') 
+    #     axesid.set_xscale('log')
+    # else: 
+    #     sns.ecdfplot(sortU,c=colorU,label=labelU,ax=axesid)
+    #     axesid.plot(xvals, cdf_fitted, color=colorU,linestyle='--') 
 
     axesid.set_xlabel(xlabel)
     axesid.set_ylabel('Proportion')
