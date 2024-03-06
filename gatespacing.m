@@ -141,7 +141,7 @@ end
         centroidsy_subset = centroidy(1:end ~= idxrem);
         [k,dist(c)] = dsearchn([centroidsx_subset,centroidsy_subset],[centroidx(c), centroidy(c)]);
 
-        if dist(c)>10^6
+        if dist(c)>10^5
             disp(centroidx(c))
             disp(centroidy(c))
             culprit = centroidx(c);
@@ -151,37 +151,39 @@ end
     end
 
     figure
-    histogram(dist,30,'FaceColor',[0.9294    0.6941    0.1255])
+    histogram(dist,200,'FaceColor',[0.9294    0.6941    0.1255])
     xlabel('Distance to nearest neighbor breached gate (m)')
     ylabel('Frequency')
     set(gca,'FontSize',14)
   
    
 %% ECDF
+figure()
 [F, X] = ecdf(dist);
 plot(X, 1-F,'Color','k','linewidth',2);
 xlabel('Distance to nearest neighbor (m)');
 ylabel('1 - Cumulative Probability');
-set(gca,'XScale','log','FontSize',14)
+set(gca,'FontSize',14,'XScale','log')
 
-% CDFs (log normal and exponential)
+% CDFs (log normal, exponential, and Weibull)
 pd_lognormal = fitdist(dist', 'LogNormal');
 pd_exponential = fitdist(dist', 'Exponential');
+pd_weibull = fitdist(dist', 'Weibull');
 x = linspace(min(dist),max(dist),10000);
 fittedCDF_lognormal = cdf(pd_lognormal, x);
 fittedCDF_exponential = cdf(pd_exponential, x);
+fittedCDF_weibull = cdf(pd_weibull, x);
 hold on;
-plot(x, 1-fittedCDF_lognormal, 'Color',[0.8510    0.3255    0.0980], 'LineWidth', 2);  % Fitted log-normal CDF
-plot(x, 1-fittedCDF_exponential, 'Color',[0.4667    0.6745    0.1882], 'LineWidth', 2);  % Fitted exponential CDF
+plot(x, 1-fittedCDF_lognormal, 'Color',[0.8510    0.3255    0.0980], 'LineWidth', 2);  
+plot(x, 1-fittedCDF_exponential, 'Color',[0.4667    0.6745    0.1882], 'LineWidth', 2);  
+plot(x, 1-fittedCDF_weibull, 'Color',[0.9294    0.6941    0.1255], 'LineWidth', 2);  
 
-legend('Empirical CDF', 'Fitted log-normal CDF', 'Fitted exponential CDF');
-
+legend('Empirical CDF', 'log-normal', 'exponential', 'Weibull');
+xlim([0,100000])
 % CDF gamma
 % params = gamfit(dist');
 % gamma_cdf = gamcdf(x, params(1), params(2)); % Use the estimated parameters
 % gamma_cdf_plot = plot(x, 1-gamma_cdf, 'Color', 'b', 'LineWidth', 2);
 
-legend('Empirical CDF', 'Fitted log-normal CDF', 'Fitted exponential CDF');
-saveas(gcf,'a_lognormal_exp_CDF.pdf')
+saveas(gcf,'a_lognormal_exp_Weibull_CDF.pdf')
 
-    
