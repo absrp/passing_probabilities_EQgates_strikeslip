@@ -219,16 +219,16 @@ end
 %% extract info from the nearest data point near the earthquake gate from the FDHI database
 % subset section of the FDHI database for desired earthquake
 
-% SRL_data = readtable('cumulative_displacements.xlsx'); 
-% eventSRL = SRL_data.Event;
-% 
-% idxSRL = find(strcmp(eventSRL,EQ_name));
-% if isempty(idxSRL)
-%     error('Earthquake name not in SRL database')
-% else 
-% end
+SRL_data = readtable('cumulative_displacements.xlsx'); 
+eventSRL = SRL_data.Event;
 
-% Cumdisp = SRL_data.CumulativeDisplacement_km_(idxSRL); 
+idxSRL = find(strcmp(eventSRL,EQ_name));
+if isempty(idxSRL)
+    error('Earthquake name not in SRL database')
+else 
+end
+
+Cumdisp = SRL_data.CumulativeDisplacement_km_(idxSRL); 
 
 % slip = data.fps_central_meters;
 magnitude = data.magnitude;
@@ -267,7 +267,8 @@ allresults_i = table(...
     distance_to_epicenter,...
     slip_at_gate,...
     normalized_slip_at_gate,...
-    repelem(string(zone),dimcheck)');
+    repelem(string(zone),dimcheck)', ...
+    repelem(Cumdisp(1),dimcheck)');
 
 all_results = [all_results; allresults_i];
 
@@ -300,7 +301,8 @@ all_results.Properties.VariableNames = {'FDHI ID',...
     'Distance to epicenter',...
     'Slip at gate (m)',...
     'Normalized slip at gate',...
-    'UTM zone'};
+    'UTM zone',...
+    'Cumulative displacement'};
 
 % export file as csv 
 writetable(all_results,'aEQgate_geometries.csv'); 
@@ -582,13 +584,12 @@ if strcmp(feature,'bend')
 
 else % all other features
 
-for gatept=1:length(coords_gatex)
-    [~,distance_to_slipi] = dsearchn(coordsgate(gatept,:),coordsslip);
-    distance_to_slip = [distance_to_slip; distance_to_slipi'];
-    idx_radius = find(distance_to_slipi<radius);
-    slip_in_radiusi = slip(idx_radius);
-    slip_in_radius = [slip_in_radius; slip_in_radiusi];
-end
+[~,distance_to_slipi] = dsearchn(coordsgate,coordsslip);
+distance_to_slip = [distance_to_slip; distance_to_slipi'];
+idx_radius = find(distance_to_slipi<radius);
+slip_in_radiusi = slip(idx_radius);
+slip_in_radius = [slip_in_radius; slip_in_radiusi];
+
 end 
 
 if length(slip_in_radius)>1
