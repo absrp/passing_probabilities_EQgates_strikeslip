@@ -43,7 +43,7 @@ The subset of the scripts that measure the geometry of earthquake gates from sha
 - [ ] To measure the geometry of earthquake gates in a shapefile
     - [ ] Run the "measure_EQgates.m" Matlab script (must run in directory containing the earthquake gate shapefiles)
     - [ ] This will output a csv file with the characterized gates
-    - [ ] To measure the spacing between earthquake gate, run the "gatespacing.m" script. This script produces a pdf output fitting log-normal and exponential CDFs to the ECDF of the gate spacings.
+    - [ ] To measure the spacing between earthquake gate, run the "gatespacing.m" script. This script produces a pdf output fitting log-normal, Weibull, and exponential CDFs to the ECDF of the gate spacings (supplemental Figure S5).
 
 - [ ] To estimate passing probabilities and event likelihood
     - [ ] Run the "analysis_EQgates_probabilities.ipynb" Jupyter Notebook. Requires the csv containing the gate geometries generated from the Matlab code in the previous step. This file ("aEQgate_geometries.csv") is also provided as part of this repository for users lacking access to Matlab or interested in accessing the geometry measurements directly without downloading the shapefiles and running the Matlab code. 
