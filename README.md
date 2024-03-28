@@ -63,11 +63,9 @@ Email: alba@caltech.edu
 
 Project Link: [https://github.com/absrp/passing_probabilities_EQgates](https://github.com/absrp/passing_probabilities_EQgates)
 
-Data link: [https://drive.google.com/drive/folders/1ecbHHmdSKvSZC_7zf8Pam6WqLQ-UTaZv?usp=share_link]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Data link: [https://drive.google.com/drive/folders/1ecbHHmdSKvSZC_7zf8Pam6WqLQ-UTaZv?usp=share_link](https://drive.google.com/drive/folders/1ecbHHmdSKvSZC_7zf8Pam6WqLQ-UTaZv?usp=share_link)
 
 Manuscript Link: * under review, stay tuned *
 
 
-
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
