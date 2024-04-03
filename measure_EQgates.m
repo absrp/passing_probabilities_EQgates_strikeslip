@@ -29,7 +29,7 @@ reflines_all = shaperead('_FDHI_FLATFILE_ECS_rev2.shp');
 
 %% populate spreadsheet with geometry and other information
 
-for i=1:length(shapefiles)
+for i=30%:length(shapefiles)
 % read shapefile
 shapename = shapefiles(i).name;
 maplines = shaperead(shapename); 
@@ -209,6 +209,7 @@ end
 slip_at_gate = [];
 normalized_slip_at_gate = [];
 
+figure
 for n = 1:length(maplines)
     [slip_at_gatei,normalized_slip_at_gatei] = find_slip_at_gate(maplines(n).X,maplines(n).Y,coordsx,coordsy,slip,zone_n,hem,shapefile_type);
     slip_at_gate = [slip_at_gate; slip_at_gatei];
@@ -272,7 +273,8 @@ allresults_i = table(...
 
 all_results = [all_results; allresults_i];
 
-%disp(i); % keeps track of progress
+disp(EQ_name); % keeps track of progress
+title(EQ_name)
 end
 end
 
@@ -355,19 +357,21 @@ elseif strcmp(shapefile_type,'bend') % check if shapefile type is a bend
     elseif length(fault_x) == 4
         v1=[fault_x(2),fault_y(2)]-[fault_x(1),fault_y(1)];
         v2=[fault_x(3),fault_y(3)]-[fault_x(2),fault_y(2)];
-        L=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
-        L = rad2deg(L);
+        anga=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
+        anga = rad2deg(anga);
         measurement_type_line = 'angle'; % double bend
 
-        % angle b test 
+        % angle b test for double bends - ensuring the two angles in the double bend are not
+        % too far apart from each other
         v1=[fault_x(3),fault_y(3)]-[fault_x(2),fault_y(2)];
         v2=[fault_x(4),fault_y(4)]-[fault_x(3),fault_y(3)];
         angb=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
         angb = rad2deg(angb);
-        if L-angb>10
-            disp(L-angb);
+        if anga-angb>10
+            disp(anga-angb)
+            L = (anga+angb)/2;
         else
-            L = L;
+            L = (anga+angb)/2;
         end
         
     else 
@@ -440,13 +444,13 @@ if length(fault_x) == 4
     
         v1=[fault_x(2),fault_y(2)]-[fault_x(1),fault_y(1)];
         v2=[fault_x(3),fault_y(3)]-[fault_x(2),fault_y(2)];
-        L = acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
-        angle = rad2deg(L);
+        angle_rad = acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
+        angle = rad2deg(angle_rad);
         
         segment_length = sqrt((fault_x(2)-fault_x(3)).^2+(fault_y(2)-fault_y(3)).^2); % note transformation to local coordinate system 
         hypothenuse = sum(segment_length);
         
-        % calculate step-over spacing for bend
+        % calculate step-over spacing for double bend
         spacing = sind(angle)*hypothenuse; 
         
         
@@ -462,11 +466,10 @@ fault_y = fault_y(~isnan(fault_y));
 refline_x = refline_x(~isnan(refline_x));
 refline_y = refline_y(~isnan(refline_y));
 
-[coords_gatex, coordsgatey] = wgs2utm(fault_y(1),fault_x(1),zone,hem);
+[coords_gatex, coordsgatey] = wgs2utm(fault_y(1),fault_x(1),zone,hem); % first point on the gate
 coords_gate = [coords_gatex' coordsgatey'];
 
 [curvexy_x, curvexy_y] = wgs2utm(refline_y,refline_x,zone,hem);
-curvexy = [curvexy_x' curvexy_y'];
 
 % total length
 x_1 = curvexy_x(1:end-1);
@@ -482,8 +485,26 @@ pt_x = pt(:,1);
 pt_y = pt(:,2);
 curvexy_dense = [pt_x pt_y];
 
-[xy,~,~] = distance2curve(curvexy,coords_gate,'spline'); % find minimum distance between gate and ECS trace
-locpt = dsearchn(curvexy_dense,xy);
+% a few tests to make sure everything is running ok
+% disp('Number of points in ECS line')
+% disp(length(refline_x))
+% disp('Number of points in interpolated line')
+% disp(length(pt_y))
+% disp('Surface rupture length')
+% disp(total_rupturelength)
+
+[xy,dist,~] = distance2curve(curvexy_dense,coords_gate,'spline'); % find minimum distance between gate and ECS trace
+[locpt,~] = dsearchn(curvexy_dense,xy); % finding what index corresponds to the location of the gate
+
+% a few tests to make sure everything is running ok
+% disp('Location on ECS trace that is closest to gate')
+% disp(xy)
+% disp('Chosen coordinates based on densified ECS curve - x')
+% disp(pt_x(locpt))
+% disp('Chosen coordinates based on densified ECS curve - y')
+% disp(pt_y(locpt))
+% disp('Distance between the gate and chosen coordinate')
+% disp(dist)
 
 % segment length
 x_1 = pt_x(1:locpt-1);
@@ -497,21 +518,18 @@ normalized_loc_along = loc_along/total_rupturelength;
 end
 function [distance_to_epi] = measure_distance_to_epicenter(fault_x,fault_y,epi_x,epi_y,zone,hem)
 
-
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
 fault_y = fault_y(~isnan(fault_y));
 
 % hold on
 % scatter(fault_x,fault_y,'b')
 % scatter(epi_x,epi_y,'r')
-% 
 
 [coords_gatex, coordsgatey] = wgs2utm(fault_y(1),fault_x(1),zone,hem);
 coords_gate = [coords_gatex' coordsgatey'];
 
 [hypoxy_x, hypoxy_y] = wgs2utm(epi_y,epi_x,zone,hem);
 hypoxy = [hypoxy_x' hypoxy_y'];
-
 
 [~,distance_to_epi] = dsearchn(hypoxy,coords_gate); % find minimum distance between gate and epicenter
 
@@ -541,9 +559,9 @@ coordsslip = [locx_maxslip locy_maxslip];
 
 end 
 function [slip_at_gate,normalized_slip_at_gate] = find_slip_at_gate(fault_x,fault_y,coords_x,coords_y,slip,zone,hem,feature)
-% find location of all slip displacements
+% find location of all slip measurements
 [coordsx_slip,coordsy_slip] = wgs2utm(coords_y,coords_x,zone,hem);
-slip_nonzero =  find(slip>0);
+slip_nonzero =  find(slip>-0.1); % avoid -999 errors while including measures of zero slip
 coordsx_slip = coordsx_slip(slip_nonzero);
 coordsy_slip = coordsy_slip(slip_nonzero);
 slip = slip(slip_nonzero);
@@ -557,26 +575,40 @@ fault_y = fault_y(~isnan(fault_y));
 coordsgate = [coords_gatex' coords_gatey'];
 coordsslip = [coordsx_slip coordsy_slip];
 
-distance_to_slip = [];
-idx = [];
-slip_in_radius = [];
-radius = 500;
+radius = 500; % meters
 
 % from middle point of bend 
 if strcmp(feature,'bend')
     if length(coords_gatex) == 3 % single bend
-    [~,distance_to_slipi] = dsearchn(coordsgate(2,:),coordsslip);
-    distance_to_slip = [distance_to_slip; distance_to_slipi'];
-    idx_radius = find(distance_to_slipi<radius);
-    slip_in_radiusi = slip(idx_radius);
-    slip_in_radius = [slip_in_radius; slip_in_radiusi];
+    [distance_to_slip] = pdist2(coordsgate(2,:),coordsslip);
+    idx_radius = find(distance_to_slip<radius);
+    length(idx_radius)
+    slip_in_radius = slip(idx_radius);
+
 
     elseif length(coords_gatex) == 4 % double bend
-    [~,distance_to_slipi] = dsearchn(coordsgate(2:3,:),coordsslip);
-    distance_to_slip = [distance_to_slip; distance_to_slipi'];
-    idx_radius = find(distance_to_slipi<radius);
-    slip_in_radiusi = slip(idx_radius);
-    slip_in_radius = [slip_in_radius; slip_in_radiusi];
+    %[distance_to_slip] = pdist2(coordsgate(2:3,:),coordsslip);
+    [distance_to_slip_pt2, I_pt2] = pdist2(coordsgate,coordsslip(2,:),'euclidean', 'smallest', 2); % for bend length pt 1
+    [distance_to_slip_pt3, I_pt3] = pdist2(coordsgate,coordsslip(3,:),'euclidean', 'smallest', 2); % for bend length pt 2
+
+    idx_radius_pt2 = find(distance_to_slip_pt2<radius);
+    idx_radius_pt3 = find(distance_to_slip_pt3<radius);
+    I_pt2 = I_pt2(idx_radius_pt2);
+    I_pt3 = I_pt3(idx_radius_pt3);
+    % find overlap between I_pt2 and I_pt3
+    commonValues = intersect(I_pt2, I_pt3);
+    [~, loc2] = ismember(I_pt2, commonValues);
+    I_pt2(loc2 ~= 0) = [];  
+    [~, loc3] = ismember(I_pt3, commonValues);
+    I_pt3(loc3 ~= 0) = []; 
+    slipvals_idx = [I_pt2;I_pt3];
+
+    slip_in_radius = slip(slipvals_idx);
+    hold on
+    scatter(coordsgate(2:3,1),coordsgate(2:3,2),'filled','MarkerFaceAlpha',0.1)
+    scatter(coordsslip(:,1),coordsslip(:,2),'filled','k')
+    scatter(coordsslip(slipvals_idx,1),coordsslip(slipvals_idx,2),'filled','m')
+
 
     else 
         error('Length of bend vector must be 3 or 4 elements')
@@ -584,18 +616,34 @@ if strcmp(feature,'bend')
 
 else % all other features
 
-[~,distance_to_slipi] = dsearchn(coordsgate,coordsslip);
-distance_to_slip = [distance_to_slip; distance_to_slipi'];
-idx_radius = find(distance_to_slipi<radius);
-slip_in_radiusi = slip(idx_radius);
-slip_in_radius = [slip_in_radius; slip_in_radiusi];
+%[distance_to_slip] = pdist2(coordsgate,coordsslip);
+    [distance_to_slip_pt2, I_pt2] = pdist2(coordsgate,coordsslip(2,:),'euclidean', 'smallest', 2); 
+    [distance_to_slip_pt1, I_pt1] = pdist2(coordsgate,coordsslip(1,:),'euclidean', 'smallest', 2); 
+    idx_radius_pt2 = find(distance_to_slip_pt2<radius);
+    idx_radius_pt1 = find(distance_to_slip_pt1<radius);
+    I_pt2 = I_pt2(idx_radius_pt2);
+    I_pt1 = I_pt1(idx_radius_pt1);
+    % find overlap between I_pt2 and I_pt3
+    commonValues = intersect(I_pt2, I_pt1);
+    [~, loc2] = ismember(I_pt2, commonValues);
+    I_pt2(loc2 ~= 0) = [];  
+    [~, loc1] = ismember(I_pt1, commonValues);
+    I_pt1(loc1 ~= 0) = []; 
+    slipvals_idx = [I_pt2;I_pt1]
+
+    slip_in_radius = slip(slipvals_idx);
+    hold on
+    scatter(coordsgate(:,1),coordsgate(:,2),'filled','MarkerFaceAlpha',0.1)
+    scatter(coordsslip(:,1),coordsslip(:,2),'filled','k')
+    scatter(coordsslip(slipvals_idx,1),coordsslip(slipvals_idx,2),'filled','m')
+
 
 end 
 
 if length(slip_in_radius)>1
     slip_at_gate = mean(slip_in_radius); 
     % normalize slip at gate
-    max_slip = max(slip); 
+    max_slip = max(slip); % max slip for event gate belongs to
     normalized_slip_at_gate = slip_at_gate/max_slip; 
 
 else
