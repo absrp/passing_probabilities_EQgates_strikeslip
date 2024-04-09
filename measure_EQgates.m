@@ -29,7 +29,7 @@ reflines_all = shaperead('_FDHI_FLATFILE_ECS_rev2.shp');
 
 %% populate spreadsheet with geometry and other information
 
-for i=30%:length(shapefiles)
+for i=1:length(shapefiles)
 % read shapefile
 shapename = shapefiles(i).name;
 maplines = shaperead(shapename); 
@@ -209,7 +209,6 @@ end
 slip_at_gate = [];
 normalized_slip_at_gate = [];
 
-figure
 for n = 1:length(maplines)
     [slip_at_gatei,normalized_slip_at_gatei] = find_slip_at_gate(maplines(n).X,maplines(n).Y,coordsx,coordsy,slip,zone_n,hem,shapefile_type);
     slip_at_gate = [slip_at_gate; slip_at_gatei];
@@ -274,7 +273,7 @@ allresults_i = table(...
 all_results = [all_results; allresults_i];
 
 disp(EQ_name); % keeps track of progress
-title(EQ_name)
+%title(EQ_name)
 end
 end
 
@@ -431,7 +430,7 @@ else
 end
 
 end 
-function [spacing] = measure_length_stepover_bend(fault_x,fault_y,zone,hem)
+function [spacing] = measure_length_stepover_bend(fault_x,fault_y,zone,hem) % proxy step-over width
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
 fault_y =fault_y(~isnan(fault_y));
 
@@ -588,27 +587,20 @@ if strcmp(feature,'bend')
 
     elseif length(coords_gatex) == 4 % double bend
     %[distance_to_slip] = pdist2(coordsgate(2:3,:),coordsslip);
-    [distance_to_slip_pt2, I_pt2] = pdist2(coordsgate,coordsslip(2,:),'euclidean', 'smallest', 2); % for bend length pt 1
-    [distance_to_slip_pt3, I_pt3] = pdist2(coordsgate,coordsslip(3,:),'euclidean', 'smallest', 2); % for bend length pt 2
-
+    [distance_to_slip_pt2] = pdist2(coordsgate(2,:),coordsslip,'euclidean'); % for bend length pt 1
+    [distance_to_slip_pt3] = pdist2(coordsgate(3,:),coordsslip,'euclidean'); % for bend length pt 2
     idx_radius_pt2 = find(distance_to_slip_pt2<radius);
     idx_radius_pt3 = find(distance_to_slip_pt3<radius);
-    I_pt2 = I_pt2(idx_radius_pt2);
-    I_pt3 = I_pt3(idx_radius_pt3);
     % find overlap between I_pt2 and I_pt3
-    commonValues = intersect(I_pt2, I_pt3);
-    [~, loc2] = ismember(I_pt2, commonValues);
-    I_pt2(loc2 ~= 0) = [];  
-    [~, loc3] = ismember(I_pt3, commonValues);
-    I_pt3(loc3 ~= 0) = []; 
-    slipvals_idx = [I_pt2;I_pt3];
+    slipvals_idx = [idx_radius_pt2';idx_radius_pt3'];
+    slipvals_idx = unique(slipvals_idx);
 
     slip_in_radius = slip(slipvals_idx);
-    hold on
-    scatter(coordsgate(2:3,1),coordsgate(2:3,2),'filled','MarkerFaceAlpha',0.1)
-    scatter(coordsslip(:,1),coordsslip(:,2),'filled','k')
-    scatter(coordsslip(slipvals_idx,1),coordsslip(slipvals_idx,2),'filled','m')
-
+    % for debugging
+    % hold on
+    % scatter(coordsgate(2:3,1),coordsgate(2:3,2),'filled','k')
+    % scatter(coordsslip(:,1),coordsslip(:,2),'filled','MarkerFaceAlpha',0.1)
+    % scatter(coordsslip(slipvals_idx,1),coordsslip(slipvals_idx,2),'filled','m')
 
     else 
         error('Length of bend vector must be 3 or 4 elements')
@@ -617,26 +609,21 @@ if strcmp(feature,'bend')
 else % all other features
 
 %[distance_to_slip] = pdist2(coordsgate,coordsslip);
-    [distance_to_slip_pt2, I_pt2] = pdist2(coordsgate,coordsslip(2,:),'euclidean', 'smallest', 2); 
-    [distance_to_slip_pt1, I_pt1] = pdist2(coordsgate,coordsslip(1,:),'euclidean', 'smallest', 2); 
+    [distance_to_slip_pt2] = pdist2(coordsgate(1,:),coordsslip,'euclidean'); % for bend length pt 1
+    [distance_to_slip_pt3] = pdist2(coordsgate(2,:),coordsslip,'euclidean'); % for bend length pt 2
     idx_radius_pt2 = find(distance_to_slip_pt2<radius);
-    idx_radius_pt1 = find(distance_to_slip_pt1<radius);
-    I_pt2 = I_pt2(idx_radius_pt2);
-    I_pt1 = I_pt1(idx_radius_pt1);
+    idx_radius_pt3 = find(distance_to_slip_pt3<radius);
     % find overlap between I_pt2 and I_pt3
-    commonValues = intersect(I_pt2, I_pt1);
-    [~, loc2] = ismember(I_pt2, commonValues);
-    I_pt2(loc2 ~= 0) = [];  
-    [~, loc1] = ismember(I_pt1, commonValues);
-    I_pt1(loc1 ~= 0) = []; 
-    slipvals_idx = [I_pt2;I_pt1]
+    slipvals_idx = [idx_radius_pt2';idx_radius_pt3'];
+    slipvals_idx = unique(slipvals_idx);
 
     slip_in_radius = slip(slipvals_idx);
-    hold on
-    scatter(coordsgate(:,1),coordsgate(:,2),'filled','MarkerFaceAlpha',0.1)
-    scatter(coordsslip(:,1),coordsslip(:,2),'filled','k')
-    scatter(coordsslip(slipvals_idx,1),coordsslip(slipvals_idx,2),'filled','m')
-
+    % for debugging 
+    % hold on
+    % scatter(coordsgate(:,1),coordsgate(:,2),'filled','k')
+    % scatter(coordsslip(:,1),coordsslip(:,2),'filled','MarkerFaceAlpha',0.1)
+    % scatter(coordsslip(slipvals_idx,1),coordsslip(slipvals_idx,2),'filled','m')
+    % 
 
 end 
 
@@ -651,6 +638,6 @@ else
     normalized_slip_at_gate = NaN;
 end 
 
-
+axis('equal')
 
 end
