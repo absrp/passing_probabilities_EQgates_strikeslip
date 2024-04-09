@@ -219,18 +219,6 @@ end
 %% extract info from the nearest data point near the earthquake gate from the FDHI database
 % subset section of the FDHI database for desired earthquake
 
-SRL_data = readtable('cumulative_displacements.xlsx'); 
-eventSRL = SRL_data.Event;
-
-idxSRL = find(strcmp(eventSRL,EQ_name));
-if isempty(idxSRL)
-    error('Earthquake name not in SRL database')
-else 
-end
-
-Cumdisp = SRL_data.CumulativeDisplacement_km_(idxSRL); 
-
-% slip = data.fps_central_meters;
 magnitude = data.magnitude;
 % fault_zone_width = data.fzw_central_meters;
 % lithology = data.geology;
@@ -267,8 +255,7 @@ allresults_i = table(...
     distance_to_epicenter,...
     slip_at_gate,...
     normalized_slip_at_gate,...
-    repelem(string(zone),dimcheck)', ...
-    repelem(Cumdisp(1),dimcheck)');
+    repelem(string(zone),dimcheck)');
 
 all_results = [all_results; allresults_i];
 
@@ -302,8 +289,7 @@ all_results.Properties.VariableNames = {'FDHI ID',...
     'Distance to epicenter',...
     'Slip at gate (m)',...
     'Normalized slip at gate',...
-    'UTM zone',...
-    'Cumulative displacement'};
+    'UTM zone'};
 
 % export file as csv 
 writetable(all_results,'aEQgate_geometries.csv'); 
