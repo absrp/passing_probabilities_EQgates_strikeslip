@@ -1,17 +1,6 @@
 # The passing probabilities of earthquake gates and their effect in surface rupture length
 A set of scripts to estimate the geometry of earthquake gates and passing probabilities as a function of geometry
 
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-<a name="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 Propagating earthquakes must overcome geometrical complexity on fault networks to grow into large, surface rupturing events. We map step-overs, bends, gaps, splays, and strands of length scales ~100-500 meters from the surface ruptures of 31 strike-slip earthquakes, recording whether ruptures propagated past or halted at the feature. This set of scripts measures the geometry of each feature and classifies passing probabilities as a function of geometry for those features with distinct breached and unbreached populations. The scripts also enable characterizing and assessing the relationship between event likelihood (refer to manuscript) and surface rupture length given the distribution of geometrical complexity on a fault.
@@ -49,7 +38,7 @@ The subset of the scripts that measure the geometry of earthquake gates from sha
     - [ ] Run the "analysis_EQgates_probabilities.ipynb" Jupyter Notebook. Requires the csv containing the gate geometries generated from the Matlab code in the previous step. This file ("aEQgate_geometries.csv") is also provided as part of this repository for users lacking access to Matlab or interested in accessing the geometry measurements directly without downloading the shapefiles and running the Matlab code. 
     - [ ] This script estimates passing probability as a function of geometry using logistic models.
     - [ ] This script also estimates the event likelihood based on the probabilities.
-    - [ ] All figures in the main body of the manuscript except for Figure 1 can be reproduced by running this code. All supplemental figures except figure S5 can be reproduced using this code too.
+    - [ ] All figures in the main body of the manuscript except for Figure 1 and Figure 4b can be reproduced by running this code. All supplemental figures except figure S5 can be reproduced using this code too.
 
 - [ ] To reproduce the rupture maps in the appendix with the earthquake gates plotted over them
     - [ ] Run the "map_maker.ipynb" script (requires the rupture maps and regional fault maps to be in shapefile format, provided in the data repository)
@@ -61,7 +50,7 @@ Please report suggestions and issues:
 
 Email: alba@caltech.edu
 
-Project Link: [https://github.com/absrp/passing_probabilities_EQgates](https://github.com/absrp/passing_probabilities_EQgates)
+Project Link: [https://github.com/absrp/passing_probabilities_EQgates_strikeslip](https://github.com/absrp/passing_probabilities_EQgates_strikeslip)
 
 Data link: [https://drive.google.com/drive/folders/1ecbHHmdSKvSZC_7zf8Pam6WqLQ-UTaZv?usp=share_link](https://drive.google.com/drive/folders/1ecbHHmdSKvSZC_7zf8Pam6WqLQ-UTaZv?usp=share_link)
 
