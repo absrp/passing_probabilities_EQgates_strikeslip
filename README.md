@@ -8,7 +8,7 @@ Propagating earthquakes must overcome geometrical complexity on fault networks t
 <!-- GETTING STARTED -->
 ## Data access
 
-This repository contains the scripts required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of earthquake gates. The data required to run the scripts is provided in the following [repository](https://drive.google.com/drive/folders/1ecbHHmdSKvSZC_7zf8Pam6WqLQ-UTaZv?usp=share_link) and listed below:
+This repository contains the scripts required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of earthquake gates. The data required to run the scripts is provided in the following [repository](https://caltech-my.sharepoint.com/:f:/r/personal/alba_caltech_edu/Documents/GRL%20EQ%20gates%20materials/Data%20and%20code?csf=1&web=1&e=J9RgIm) and listed below:
 
 - [ ] Data repository directories and content
     - [ ] primary_EQgate_shapefiles_v1
