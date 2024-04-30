@@ -41,7 +41,7 @@ The subset of the scripts that measure the geometry of earthquake gates from sha
     - [ ] All figures in the main body of the manuscript except for Figure 1 and Figure 4b can be reproduced by running this code. All supplemental figures except figure S5 can be reproduced using this code too.
 
 - [ ] To reproduce the rupture maps in the appendix with the earthquake gates plotted over them
-    - [ ] Run the "map_maker.ipynb" script (requires the rupture maps and regional fault maps to be in shapefile format, provided in the data repository)
+    - [ ] Run the "map_maker.ipynb" script (requires the rupture maps and regional fault maps to be in shapefile format, provided in the data repository). The rupture maps in kzm format may be transformed in to shapefile format using the script kmz2shp.m
 
 <!-- CONTACT -->
 ## Contact
