@@ -1,9 +1,9 @@
-# The passing probabilities of earthquake gates and their effect in surface rupture length
+# The passing probabilities of zones of geometrical complexity and their effect in surface rupture length
 A set of scripts to estimate the geometry of earthquake gates and passing probabilities as a function of geometry
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-Propagating earthquakes must overcome geometrical complexity on fault networks to grow into large, surface rupturing events. We map step-overs, bends, gaps, splays, and strands of length scales ~100-500 meters from the surface ruptures of 31 strike-slip earthquakes, recording whether ruptures propagated past or halted at the feature. This set of scripts measures the geometry of each feature and classifies passing probabilities as a function of geometry for those features with distinct breached and unbreached populations. The scripts also enable characterizing and assessing the relationship between event likelihood (refer to manuscript) and surface rupture length given the distribution of geometrical complexity on a fault.
+Propagating earthquakes must overcome geometrical complexity on fault networks to grow into large, surface rupturing events. We map step-overs, bends, gaps, splays, and strands of length scales ~100-500 meters from the surface ruptures of 31 strike-slip earthquakes, recording whether ruptures propagated past the feature. We find that step-overs and bends can arrest rupture and develop a statistical model for passing probability as a function of geometry for each group. Step-overs wider than 1.2 km, single bends larger than 32°, and double bends larger than 38° are breached by rupture half of the time. ~20% of the ruptures terminate on straight segments. We examine how the distribution of geometrical complexity influences surface rupture length, inferring an exponential relationship between rupture length and event probability for a given fault. Our findings support that geometrical complexity limits the size of large events and help discriminate between different proposed models of rupture propagation.
 
 <!-- GETTING STARTED -->
 ## Data access
@@ -12,7 +12,7 @@ This repository contains the scripts required to reproduce the results in Rodrig
 
 - [ ] Data repository directories and content
     - [ ] primary_EQgate_shapefiles_v1
-          Shapefiles of the earthquake gates mapped for each event. 
+          Shapefiles of the zones of geometrical complexity mapped for each event. 
     - [ ] Regional_maps
           Shapefiles with the regional fault maps for each event.
     - [ ] FDHI_data
@@ -24,15 +24,15 @@ Refer to the readme file in the repository for additional details.
 
 ### Prerequisites for running the scripts
 
-The subset of the scripts that measure the geometry of earthquake gates from shapefiles are in Matlab and require the Matlab Mapping Toolbox. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The specific dependencies for each Matlab script to run are listed at the beginning of the corresponding script. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory.
+The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab and require the Matlab Mapping Toolbox. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The specific dependencies for each Matlab script to run are listed at the beginning of the corresponding script. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory.
 
 <!-- CODE ROADMAP -->
 ### Measuring earthquake gate geometry, estimating passing probabilities, and estimating event likelihood
 
-- [ ] To measure the geometry of earthquake gates in a shapefile
+- [ ] To measure the geometry offeatures in a shapefile
     - [ ] Run the "measure_EQgates.m" Matlab script (must run in directory containing the earthquake gate shapefiles)
-    - [ ] This will output a csv file with the characterized gates
-    - [ ] To measure the spacing between earthquake gate, run the "gatespacing.m" script. This script produces a pdf output fitting log-normal, Weibull, and exponential CDFs to the ECDF of the gate spacings (supplemental Figure S5).
+    - [ ] This will output a csv file with the characterized features
+    - [ ] To measure the spacing between zones of geometrical complexity along a rupture, run the "gatespacing.m" script. This script produces a pdf output fitting log-normal, Weibull, and exponential CDFs to the ECDF of the feature spacings (supplemental Figure S5).
 
 - [ ] To estimate passing probabilities and event likelihood
     - [ ] Run the "analysis_EQgates_probabilities.ipynb" Jupyter Notebook. Requires the csv containing the gate geometries generated from the Matlab code in the previous step. This file ("aEQgate_geometries.csv") is also provided as part of this repository for users lacking access to Matlab or interested in accessing the geometry measurements directly without downloading the shapefiles and running the Matlab code. 
