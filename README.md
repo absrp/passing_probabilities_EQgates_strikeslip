@@ -27,7 +27,7 @@ Refer to the readme file in the repository for additional details.
 The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab and require the Matlab Mapping Toolbox. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The specific dependencies for each Matlab script to run are listed at the beginning of the corresponding script. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory.
 
 <!-- CODE ROADMAP -->
-### Measuring earthquake gate geometry, estimating passing probabilities, and estimating event likelihood
+### Measuring fault geometry, estimating passing probabilities, and estimating event likelihood
 
 - [ ] To measure the geometry offeatures in a shapefile
     - [ ] Run the "measure_EQgates.m" Matlab script (must run in directory containing the earthquake gate shapefiles)
