@@ -83,7 +83,7 @@ L_line = []; % create vector to store geometry data
 measurement_type_line = {}; 
 data = FDHI_data(EQ_select,:);
 
-% extract utm zone from FDHI database
+% extract utm zone 
 zone = data.zone;
 zone = zone{1};
 
