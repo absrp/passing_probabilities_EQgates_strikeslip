@@ -48,13 +48,13 @@ The subset of the scripts that measure the geometry of different features from s
 
 Please report suggestions and issues:
 
-Email: alba@caltech.edu
+Email: alba@caltech.edu, amrodriguezpadilla@gmail.com
 
 Project Link: [https://github.com/absrp/passing_probabilities_EQgates_strikeslip](https://github.com/absrp/passing_probabilities_EQgates_strikeslip)
 
 Data link: [https://zenodo.org/records/11095762](https://zenodo.org/records/11095762)
 
-Manuscript Link: * under review, stay tuned * 
+Manuscript Link: under review
 [Pre-print link](https://essopenarchive.org/users/700353/articles/687281-the-influence-of-earthquake-gates-on-surface-rupture-length)
 
 
