@@ -22,9 +22,14 @@ This repository contains the scripts required to reproduce the results in Rodrig
           
 Refer to the readme file in the repository for additional details. 
 
-### Prerequisites for running the scripts
+### Prerequisites for running the scripts and installation
 
-The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab and require the Matlab Mapping Toolbox. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The specific dependencies for each Matlab script to run are listed at the beginning of the corresponding script. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory.
+The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab and require the Matlab Mapping Toolbox. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The specific dependencies for each Matlab script to run are listed at the beginning of the corresponding script. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory. To make a Python environment to run the Notebook:
+
+'''
+conda env create -f EQ_gates.yml
+conda activate EQ_gates
+'''
 
 <!-- CODE ROADMAP -->
 ### Measuring fault geometry, estimating passing probabilities, and estimating event likelihood
