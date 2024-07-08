@@ -11,3 +11,6 @@ dependencies:
   - scipy
   - ipykernel
   - jinja2
+  - geopandas
+  - matplotlib-scalebar
+  - geodatasets
