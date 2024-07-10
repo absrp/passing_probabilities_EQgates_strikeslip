@@ -6,19 +6,36 @@
 % geometrical complexity shapefiles per event (must operate in directory
 % with shapefiles) 
 % shapefile of ECS lines from FDHI database '_FDHI_FLATFILE_ECS_rev2.shp'
-% info from FDHI appendix 'data_FDHI.xlsx'
+% (Sarmiento et al., 2021)
+% info from FDHI appendix 'data_FDHI.xlsx' (from Sarmiento et al., 2021)
 
 % required functions (available from Mathworks in links below): 
+
 % function wsg2utm (version 2) https://www.mathzworks.com/matlabcentral/fileexchange/14804-wgs2utm-version-2
 % function distance2curve https://www.mathworks.com/matlabcentral/fileexchange/34869-distance2curve#:~:text=Distance2curve%20allows%20you%20to%20specify,and%20the%20closest%20point%20identified.
+% function interparc https://www.mathworks.com/matlabcentral/fileexchange/34874-interparc
+% These functions are included in the Source_code directory, add to path
 
+% required Toolboxes:
+
+% Matlab Mapping Toolbox
+% Matlab Statistics and Machine Learning Toolbox
+
+%% set up 
 clear; close all;
 
+currentDir = pwd;
+addpath(genpath(fullfile(currentDir, 'Source_code')));
+addpath(genpath(fullfile(currentDir, '11095762'))); % Zenodo repo data -- see required inputs above 
+
+shapefileDir = fullfile(currentDir, '11095762/primary_EQgate_shapefiles_v1'); % shapefile directory in folder 11095762
+
+%% load data
 % import FDHI data
 FDHI_data = readtable('data_FDHI.xlsx');
 
 % import shapefiles and extract information from all of them 
-shapefiles = dir('*.shp'); % access all shapefile names in the folder
+shapefiles = dir(fullfile(shapefileDir, '*.shp'));
 
 % create results table
 all_results = table();
@@ -26,7 +43,7 @@ all_results = table();
 fault_x = [];
 fault_y = [];
 
-reflines_all = shaperead('_FDHI_FLATFILE_ECS_rev2.shp'); 
+reflines_all = shaperead('11095762/reflines_FDHI/_FDHI_FLATFILE_ECS_rev2.shp'); % ECS lines from the FDHI database
 
 %% populate spreadsheet with geometry and other information
 
@@ -104,7 +121,7 @@ end
 
 % measure step-over width, gap length, and bend and splay angle
 for n = 1:length(maplines) 
-  [L_line(n),measurement_type_line{n}] =  measure_length_angle(maplines(n).X,maplines(n).Y,zone_n,hem,shapefile_type); 
+  [L_line(n),measurement_type_line{n}] =  measure_basic_length_angle(maplines(n).X,maplines(n).Y,zone_n,hem,shapefile_type); 
   [fault_xi,fault_yi]= savecoords(maplines(n).X,maplines(n).Y,zone_n,hem);
   fault_x = [fault_x; fault_xi'];
   fault_y = [fault_y; fault_yi'];
@@ -139,16 +156,16 @@ spacing = [];
 % save double bend length and step-over proxy width
 
 for n = 1:length(maplines) 
-    if isfield(maplines(n),'distance')
-        distance(n) = maplines(n).distance; 
+    if isfield(maplines(n),'distance') % option to store approximated splay lengths from Sophia's observations, currently off
+        distance(n) = 0; % maplines(n).distance; % option to store approximated splay lengths from Sophia's observations, currently off
         type_bend{n} = 'NaN'; 
         spacing(n) = 0;
         
    elseif strcmp(shapefile_type,'bend')
    for n = 1:length(maplines) 
        
-    [distance(n),type_bend{n}] =  measure_length(maplines(n).X,maplines(n).Y,zone_n,hem);
-    spacing(n) = measure_length_stepover_bend(maplines(n).X,maplines(n).Y,zone_n,hem);
+    [distance(n),type_bend{n}] =  measure_bend_length(maplines(n).X,maplines(n).Y,zone_n,hem);
+    spacing(n) = measure_bend_proxy_width(maplines(n).X,maplines(n).Y,zone_n,hem);
     
     if strcmp(type_bend{n},'single')
         mech_type{n} = 'NaN';
@@ -286,9 +303,9 @@ all_results.Properties.VariableNames = {'FDHI ID',...
     'Breached or unbreached',...
     'Type (releasing or restraining)',...
     'Type (single or double)',...
-    'Distance splay or double bend (m)',...
+    'Double bend length (m)',...
     'Length (m) or angle (deg)',...
-    'Spacing double bend (m)',...
+    'Bend proxy step-over width (m)',...
     'Type (length or angle)',...
     'Location along rupture',...
     'Total rupture length',...
@@ -311,7 +328,7 @@ if fault_y<90
 else
 end
 end
-function [L,measurement_type_line] = measure_length_angle(fault_x,fault_y,zone,hem,shapefile_type)
+function [L,measurement_type_line] = measure_basic_length_angle(fault_x,fault_y,zone,hem,shapefile_type)
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
 fault_y =fault_y(~isnan(fault_y));
 if fault_y<90
@@ -406,7 +423,7 @@ else
     error('ERROR: Shapefile type must be splay, gap, bend, or step-over (stepover)')
 end 
 end 
-function [distance,bend_type] = measure_length(fault_x,fault_y,zone,hem)
+function [bend_length,bend_type] = measure_bend_length(fault_x,fault_y,zone,hem)
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
 fault_y =fault_y(~isnan(fault_y));
 if fault_y<90
@@ -415,15 +432,15 @@ else
 end
 if length(fault_x) == 4
         segment_length = sqrt((fault_x(2)-fault_x(3)).^2+(fault_y(2)-fault_y(3)).^2); % note transformation to local coordinate system 
-        distance = sum(segment_length);
+        bend_length = sum(segment_length);
         bend_type = 'double';
 else
-    distance = 0;
+    bend_length = 0;
     bend_type = 'single';
 end
 
 end 
-function [spacing] = measure_length_stepover_bend(fault_x,fault_y,zone,hem) % proxy step-over width
+function [spacing] = measure_bend_proxy_width(fault_x,fault_y,zone,hem) % proxy step-over width
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
 fault_y =fault_y(~isnan(fault_y));
 
