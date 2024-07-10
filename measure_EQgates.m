@@ -1,9 +1,10 @@
-%% this script takes in shapefiles of earthquake gates along surface ruptures in the FDHI
+%% this script takes in shapefiles of zones of geometrical complexity along surface ruptures in the FDHI
 %% database and measures their geometrical attributes
 
 % required inputs
 
-% earthquake gate map shapefiles per event
+% geometrical complexity shapefiles per event (must operate in directory
+% with shapefiles) 
 % shapefile of ECS lines from FDHI database '_FDHI_FLATFILE_ECS_rev2.shp'
 % info from FDHI appendix 'data_FDHI.xlsx'
 
@@ -180,12 +181,12 @@ end
 dimcheck = size(maplines);
 dimcheck = dimcheck(:,1); 
 
-%% location of gate along rupture (referenced to ECS files in FDHI database)
+%% location of geometrical complexity along rupture (referenced to ECS files in FDHI database)
+total_rupturelength = [];
 
+% find location along the rupture (absolute and normalized)
 loc_along = [];
 normalized_loc_along = [];
-total_rupturelength = [];
-distance_to_slipmax = [];
 
 for n = 1:length(maplines)
    [total_rupturelengthi,loc_alongi,normalized_loc_alongi] = measure_location_along_rupture(maplines(n).X,maplines(n).Y,reflines.X,reflines.Y,zone_n,hem);
@@ -194,6 +195,7 @@ for n = 1:length(maplines)
     total_rupturelength = [total_rupturelength; total_rupturelengthi];
 end 
 
+% find distance from geometrical complexity to event epicenter
 distance_to_epicenter = [];
 
 for n = 1:length(maplines)
@@ -201,11 +203,16 @@ for n = 1:length(maplines)
     distance_to_epicenter = [distance_to_epicenter; distance_to_epicenteri];
 end 
 
+% find distance from geometrical complexity to peak slip
+distance_to_slipmax = [];
+
 for n = 1:length(maplines)
     [distance_to_slipmaxi] = measure_distance_to_slipmax(maplines(n).X,maplines(n).Y,coordsx,coordsy,slip,zone_n,hem);
     distance_to_slipmax = [distance_to_slipmax; distance_to_slipmaxi];
 end 
 
+% find absolute and normalized slip at the location of the geometrical
+% complexity
 slip_at_gate = [];
 normalized_slip_at_gate = [];
 
@@ -292,7 +299,7 @@ all_results.Properties.VariableNames = {'FDHI ID',...
     'UTM zone'};
 
 % export file as csv 
-writetable(all_results,'aEQgate_geometries.csv'); 
+writetable(all_results,'geometries.csv'); 
 
 %% function dumpster
 % functions that are called in the script go here 
@@ -435,7 +442,8 @@ if length(fault_x) == 4
         segment_length = sqrt((fault_x(2)-fault_x(3)).^2+(fault_y(2)-fault_y(3)).^2); % note transformation to local coordinate system 
         hypothenuse = sum(segment_length);
         
-        % calculate step-over spacing for double bend
+        % calculate step-over spacing for double bend (step-over proxy
+        % width) 
         spacing = sind(angle)*hypothenuse; 
         
         
