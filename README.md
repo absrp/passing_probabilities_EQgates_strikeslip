@@ -16,7 +16,7 @@ This repository contains the scripts required to reproduce the results in Rodrig
     - [ ] Regional_maps
           Shapefiles with the regional fault maps for each event.
     - [ ] FDHI_data
-          Event information and displacement data for each event. Also available from the FDHI database appendix. 
+          Event information and displacement data for each event stored in excel file. Data from the FDHI database appendix. 
     - [ ] event_kmz
           kmz files and primary rupture shapefiles for each event in the FDHI database. Kmz files sourced from the FDHI database appendix. Shapefiles generated using the kzm2shp script. 
           
@@ -24,29 +24,30 @@ Refer to the readme file in the repository for additional details.
 
 ### Prerequisites for running the scripts and installation
 
-The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab and require the Matlab Mapping Toolbox. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The specific dependencies for each Matlab script to run are listed at the beginning of the corresponding script. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory. To make a Python environment to run the Notebook:
+The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab. The specific dependencies are listed on top of each script. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory. 
+
+To make a Python environment to run the Notebook:
 
 ```
 conda env create -f EQ_gates.yml
 conda activate EQ_gates
 ```
 
-<!-- CODE ROADMAP -->
 ### Measuring fault geometry, estimating passing probabilities, and estimating event likelihood
 
 - [ ] To measure the geometry offeatures in a shapefile
-    - [ ] Run the "measure_EQgates.m" Matlab script (must run in directory containing the earthquake gate shapefiles)
-    - [ ] This will output a csv file with the characterized features
+    - [ ] Run the "measure_geometry.m" Matlab script 
+    - [ ] This will output a csv file with the characterized features (geometry.csv)
     - [ ] To measure the spacing between zones of geometrical complexity along a rupture, run the "gatespacing.m" script. This script produces a pdf output fitting log-normal, Weibull, and exponential CDFs to the ECDF of the feature spacings (supplemental Figure S5).
 
 - [ ] To estimate passing probabilities and event likelihood
-    - [ ] Run the "analysis_EQgates_probabilities.ipynb" Jupyter Notebook. Requires the csv containing the gate geometries generated from the Matlab code in the previous step. This file ("aEQgate_geometries.csv") is also provided as part of this repository for users lacking access to Matlab or interested in accessing the geometry measurements directly without downloading the shapefiles and running the Matlab code. 
+    - [ ] Run the "analysis_rupture_probabilities.ipynb" Jupyter Notebook. Requires the csv containing the measured geometries generated from the Matlab code in the previous step. This file ("geometries.csv") is also provided as part of this repository for users lacking access to Matlab or interested in accessing the geometry measurements directly without downloading the shapefiles and running the Matlab code. 
     - [ ] This script estimates passing probability as a function of geometry using logistic models.
     - [ ] This script also estimates the event likelihood based on the probabilities.
     - [ ] All figures in the main body of the manuscript except for Figure 1 and Figure 4b can be reproduced by running this code. All supplemental figures except figure S5 can be reproduced using this code too.
 
 - [ ] To reproduce the rupture maps in the appendix with the earthquake gates plotted over them
-    - [ ] Run the "map_maker.ipynb" script (requires the rupture maps and regional fault maps to be in shapefile format, provided in the data repository). The rupture maps in kzm format may be transformed in to shapefile format using the script kmz2shp.m
+    - [ ] Run the "map_maker.ipynb" script (requires the rupture maps and regional fault maps to be in shapefile format, provided in the Zenodo data repository). 
 
 <!-- CONTACT -->
 ## Contact
