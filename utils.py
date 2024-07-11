@@ -122,7 +122,8 @@ def build_logistic_regression(
             y='Breached or unbreached',
             ax=axesid,size=ptsize,
             hue="Breached or unbreached",
-            palette=palette,alpha=0.7
+            palette=palette,alpha=0.7,
+            legend=False
         )
     else:  
         sns.swarmplot(
@@ -131,7 +132,8 @@ def build_logistic_regression(
             y='Breached or unbreached',
             ax=axesid,size=ptsize,
             hue="Breached or unbreached",
-            palette=palette,alpha=0.7
+            palette=palette,alpha=0.7,
+            legend=False
         )
 
     if max(group['Length (m) or angle (deg)'])>90:
@@ -161,7 +163,7 @@ def build_logistic_regression(
     axesid.set_ylabel('Passing probability')
     axesid.set_xlabel(xlabel)
     axesid.set_yticklabels(["Breached", "Unbreached"],rotation=90,va='center')
-    axesid.get_legend().remove()
+
 
     return probname, acc, pre, f1, roc, confusion_matrixi, BUbin, xfeature 
 
@@ -184,14 +186,13 @@ def build_regression_double_bend_length(grouped,groupid,type,feature_type,axesid
 
     palette = {'breached': 'teal', 'unbreached': 'darkorange'}
     if max(xfeature)>90:
-        sns.swarmplot(data=group,x=feature_type,y='Breached or unbreached',ax=axesid,size=ptsize,hue="Breached or unbreached",palette=palette,alpha=0.7)
+        sns.swarmplot(data=group,x=feature_type,y='Breached or unbreached',ax=axesid,size=ptsize,hue="Breached or unbreached",palette=palette,alpha=0.7,legend=False)
     else:
-        sns.swarmplot(data=group,x=feature_type,y='Breached or unbreached',ax=axesid,size=ptsize,hue="Breached or unbreached",palette=palette,alpha=0.7)
+        sns.swarmplot(data=group,x=feature_type,y='Breached or unbreached',ax=axesid,size=ptsize,hue="Breached or unbreached",palette=palette,alpha=0.7,legend=False)
 
     axesid.set_xscale('log')
     axesid.set_xlabel(xlabel)
     axesid.set_yticklabels(["Breached", "Unbreached"],rotation=90,va='center')
-    axesid.get_legend().remove()
 
     if max(group['Length (m) or angle (deg)'])>90:
         bootstrap_errors(xfeature, BUbin, class_weightb, axesid, minx, maxx, True)
