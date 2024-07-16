@@ -56,7 +56,7 @@ Please report suggestions and issues:
 
 Email: alba@caltech.edu, amrodriguezpadilla@gmail.com
 
-Project Link: [https://github.com/absrp/passing_probabilities_EQgates_strikeslip](https://github.com/absrp/passing_probabilities_EQgates_strikeslip)
+Code Link: [https://github.com/absrp/passing_probabilities_EQgates_strikeslip](https://github.com/absrp/passing_probabilities_EQgates_strikeslip)
 
 Data link: [https://zenodo.org/records/11095762](https://zenodo.org/records/11095762)
 
