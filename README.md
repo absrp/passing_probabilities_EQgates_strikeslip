@@ -56,11 +56,11 @@ Please report suggestions and issues:
 
 Email: alba@caltech.edu, amrodriguezpadilla@gmail.com
 
-Code Link: [https://github.com/absrp/passing_probabilities_EQgates_strikeslip](https://github.com/absrp/passing_probabilities_EQgates_strikeslip)
+Code link: [https://github.com/absrp/passing_probabilities_EQgates_strikeslip](https://github.com/absrp/passing_probabilities_EQgates_strikeslip)
 
 Data link: [https://zenodo.org/records/11095762](https://zenodo.org/records/11095762)
 
-Manuscript Link: under review
+Manuscript link: under review
 [Pre-print link](https://essopenarchive.org/users/700353/articles/687281-the-influence-of-earthquake-gates-on-surface-rupture-length)
 
 
