@@ -24,7 +24,7 @@ Refer to the readme file in the repository for additional details.
 
 ### Prerequisites for running the scripts and installation
 
-The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab. The specific dependencies are listed on top of each script. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory. 
+The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab. The specific dependencies are listed on top of each script. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory. These scripts have been tested on MacOS.
 
 To make a Python environment to run the Notebook:
 
