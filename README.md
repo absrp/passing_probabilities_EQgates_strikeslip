@@ -49,12 +49,7 @@ conda activate EQ_gates
 - [ ] To reproduce the rupture maps in the appendix with the earthquake gates plotted over them
     - [ ] Run the "map_maker.ipynb" script (requires the rupture maps and regional fault maps to be in shapefile format, provided in the Zenodo data repository). 
 
-<!-- CONTACT -->
-## Contact
-
-Please report suggestions and issues:
-
-Email: amrodriguezpadilla@gmail.com, alba@caltech.edu
+## Links
 
 Code link: [https://github.com/absrp/passing_probabilities_EQgates_strikeslip](https://github.com/absrp/passing_probabilities_EQgates_strikeslip)
 
@@ -62,6 +57,13 @@ Data link: [https://zenodo.org/records/11095762](https://zenodo.org/records/1109
 
 Manuscript link: under review
 [Pre-print link](https://essopenarchive.org/users/700353/articles/687281-the-influence-of-earthquake-gates-on-surface-rupture-length)
+
+## Contact
+
+Please report suggestions and issues:
+
+Email: amrodriguezpadilla@gmail.com, alba@caltech.edu
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
