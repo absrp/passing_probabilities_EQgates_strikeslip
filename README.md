@@ -20,13 +20,13 @@ This repository contains the scripts required to reproduce the results in Rodrig
     - [ ] event_kmz
           kmz files and primary rupture shapefiles for each event in the FDHI database. Kmz files sourced from the FDHI database appendix. Shapefiles generated using the kzm2shp script. 
           
-Refer to the readme file in the repository for additional details. 
+Refer to the readme file in the Zenodo repository linked above for additional details. 
 
 ### Prerequisites for running the scripts and installation
 
 The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab. The specific dependencies are listed on top of each script. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory. These scripts have been tested on MacOS.
 
-To make a Python environment to run the Notebook:
+To make a Python environment to run the Notebooks:
 
 ```
 conda env create -f EQ_gates.yml
@@ -54,7 +54,7 @@ conda activate EQ_gates
 
 Please report suggestions and issues:
 
-Email: alba@caltech.edu, amrodriguezpadilla@gmail.com
+Email: amrodriguezpadilla@gmail.com, alba@caltech.edu
 
 Code link: [https://github.com/absrp/passing_probabilities_EQgates_strikeslip](https://github.com/absrp/passing_probabilities_EQgates_strikeslip)
 
