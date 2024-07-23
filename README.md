@@ -22,7 +22,7 @@ This repository contains the scripts required to reproduce the results in Rodrig
           
 Refer to the readme file in the Zenodo repository linked above for additional details. 
 
-### Prerequisites for running the scripts and installation
+## Prerequisites for running the scripts and installation
 
 The subset of the scripts that measure the geometry of different features from shapefiles are in Matlab. The specific dependencies are listed on top of each script. Some of the scripts rely on functions downloable from Mathworks, and are provided as part of this repository in the source_code directory. The scripts for estimating passing probabilities and event likelihood are available as Python Jupyter Notebooks, with the functions stored in the .utils file in the directory. These scripts have been tested on MacOS.
 
@@ -33,7 +33,7 @@ conda env create -f EQ_gates.yml
 conda activate EQ_gates
 ```
 
-### Measuring fault geometry, estimating passing probabilities, and estimating event likelihood
+## Running the scripts: measuring fault geometry, estimating passing probabilities, and estimating event likelihood
 
 - [ ] To measure the geometry offeatures in a shapefile
     - [ ] Run the "measure_geometry.m" Matlab script 
