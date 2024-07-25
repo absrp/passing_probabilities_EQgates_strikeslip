@@ -1,5 +1,5 @@
 # The passing probabilities of zones of geometrical complexity and their effect in surface rupture length
-A set of scripts to characterize different zones of geometrical complexity along surface ruptures and passing probabilities as a function of geometry
+A set of scripts to characterize different zones of geometrical complexity along surface ruptures and passing probabilities as a function of geometry.
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
