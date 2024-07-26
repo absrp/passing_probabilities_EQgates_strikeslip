@@ -43,7 +43,7 @@ conda activate EQ_gates
     - [ ] Run the "analysis_rupture_probabilities.ipynb" Jupyter Notebook. Requires the csv containing the measured geometries generated from the Matlab code in the previous step. This file ("geometries.csv") is also provided as part of this repository for users lacking access to Matlab or interested in accessing the geometry measurements directly without downloading the shapefiles and running the Matlab code. 
     - [ ] This script estimates passing probability as a function of geometry using logistic models.
     - [ ] This script also estimates the event likelihood based on the probabilities.
-    - [ ] All figures in the main body of the manuscript except for Figure 1 and Figure 4b can be reproduced by running this code. All supplemental figures except figure S5 can be reproduced using this code too.
+    - [ ] All figures in the main body of the manuscript except for Figure 1 and Figure 4b can be reproduced by running this code. All supplemental figures except figure S6 can be reproduced using this code too.
 
 - [ ] To reproduce the rupture maps in the appendix with the earthquake gates plotted over them
     - [ ] Run the "map_maker.ipynb" script (requires the rupture maps and regional fault maps to be in shapefile format, provided in the Zenodo data repository). 
