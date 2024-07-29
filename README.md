@@ -36,7 +36,7 @@ conda activate EQ_gates
 ## Running the scripts: measuring fault geometry, estimating passing probabilities, and estimating event likelihood
 
 - [ ] To measure the geometry offeatures in a shapefile
-    - [ ] Run the "measure_geometry.m" Matlab script. This will output a csv file with the characterized features (geometry.csv).
+    - [ ] Run the "measure_geometry.m" Matlab script. This will output a csv file with the characterized features (geometries.csv).
     - [ ] To measure the spacing between zones of geometrical complexity along a rupture, run the "gatespacing.m" script. This script produces a pdf output fitting log-normal, Weibull, and exponential CDFs to the ECDF of the feature spacings (supplemental Figure S6).
 
 - [ ] To estimate passing probabilities and event likelihood
