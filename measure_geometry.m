@@ -25,7 +25,7 @@
 clear; close all;
 
 currentDir = pwd;
-addpath(genpath(fullfile(currentDir, 'Source_code')));
+addpath(genpath(fullfile(currentDir, 'Source_code'))); % set of functions downloaded from Mathworks
 addpath(genpath(fullfile(currentDir, '11095762'))); % Zenodo repo data -- see required inputs above 
 
 shapefileDir = fullfile(currentDir, '11095762/geometrical_complexity_shapefiles_v1'); % shapefile directory in folder 11095762
@@ -283,8 +283,7 @@ allresults_i = table(...
 
 all_results = [all_results; allresults_i];
 
-disp(EQ_name); % keeps track of progress
-%title(EQ_name)
+%disp(EQ_name); % for debugging
 end
 end
 
@@ -332,30 +331,33 @@ function [L,measurement_type_line] = measure_basic_length_angle(fault_x,fault_y,
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
 fault_y =fault_y(~isnan(fault_y));
 if fault_y<90
-[fault_x,fault_y]=wgs2utm(fault_y,fault_x,zone,hem);
+[fault_x,fault_y]= wgs2utm(fault_y,fault_x,zone,hem);
 else
 end
 
 % measure angle or length depending on shapefile type 
 
 if strcmp(shapefile_type,'splay') % check if shapefile type is a splay
-% measure angle between maplines
+% measure angle between splay lines
 v1=[fault_x(1),fault_y(1)]-[fault_x(2),fault_y(2)];
 v2=[fault_x(end),fault_y(end)]-[fault_x(2),fault_y(2)];
-L=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
+L=acos(sum(v1.*v2)/(norm(v1)*norm(v2))); % measure angle
 L = rad2deg(L);
 measurement_type_line = 'angle';
 
 elseif strcmp(shapefile_type,'bend') % check if shapefile type is a bend
-    if length(fault_x) == 3
-    % measure angle between maplines
+    if length(fault_x) == 3  % single bend
+    % measure angle between bend lines
         v1=[fault_x(2),fault_y(2)]-[fault_x(1),fault_y(1)];
         v2=[fault_x(end),fault_y(end)]-[fault_x(2),fault_y(2)];
         L=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
         L = rad2deg(L);
-        measurement_type_line = 'angle'; % single bend
+        measurement_type_line = 'angle';
+
+        % check for cases where the obtuse angle may have been measured
         if L>90
-            L = 180-L;
+        L = 180-L; % occurs once for a Superstition Hills bend
+
         elseif L>180
             error('Angle larger than 180')
         elseif L<0
@@ -363,28 +365,30 @@ elseif strcmp(shapefile_type,'bend') % check if shapefile type is a bend
         else
             L = L;
         end
-    elseif length(fault_x) == 4
+
+    elseif length(fault_x) == 4 % double bend
         v1=[fault_x(2),fault_y(2)]-[fault_x(1),fault_y(1)];
         v2=[fault_x(3),fault_y(3)]-[fault_x(2),fault_y(2)];
         anga=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
         anga = rad2deg(anga);
-        measurement_type_line = 'angle'; % double bend
+        measurement_type_line = 'angle'; 
 
         % angle b test for double bends - ensuring the two angles in the double bend are not
-        % too far apart from each other
+        % too different
         v1=[fault_x(3),fault_y(3)]-[fault_x(2),fault_y(2)];
         v2=[fault_x(4),fault_y(4)]-[fault_x(3),fault_y(3)];
         angb=acos(sum(v1.*v2)/(norm(v1)*norm(v2)));
         angb = rad2deg(angb);
         if anga-angb>10
-            disp(anga-angb)
+            %disp(anga-angb)
             L = (anga+angb)/2;
         else
             L = (anga+angb)/2;
         end
         
+
     else 
-        disp(length(fault_x))
+    disp(length(fault_x))
     error('Bends must contain three or four x,y coordinate pairs')
 
     end
@@ -399,7 +403,7 @@ segment_length = sqrt((x_1-x_2).^2+(y_1-y_2).^2); % note transformation to local
 L = sum(segment_length);
 measurement_type_line = 'length';
 
-elseif strcmp(shapefile_type,'strand') % check if shapefile type is a step-over
+elseif strcmp(shapefile_type,'strand') % check if shapefile type is a strand
 % calculate length
 x_1 = fault_x(1:end-1);
 x_2 = fault_x(2:end);
@@ -592,7 +596,7 @@ if strcmp(feature,'bend')
     if length(coords_gatex) == 3 % single bend
     [distance_to_slip] = pdist2(coordsgate(2,:),coordsslip);
     idx_radius = find(distance_to_slip<radius);
-    length(idx_radius)
+    %length(idx_radius)
     slip_in_radius = slip(idx_radius);
 
 
