@@ -4,6 +4,7 @@
 % required inputs
 
 % geometrical complexity shapefiles per event
+% (geometrical_complexity_shapefiles_v1)
 % shapefile of ECS lines from FDHI database '_FDHI_FLATFILE_ECS_rev2.shp'
 % (Sarmiento et al., 2021)
 % info from FDHI appendix 'data_FDHI.xlsx' (from Sarmiento et al., 2021)
@@ -27,7 +28,7 @@ currentDir = pwd;
 addpath(genpath(fullfile(currentDir, 'Source_code')));
 addpath(genpath(fullfile(currentDir, '11095762'))); % Zenodo repo data -- see required inputs above 
 
-shapefileDir = fullfile(currentDir, '11095762/primary_EQgate_shapefiles_v1'); % shapefile directory in folder 11095762
+shapefileDir = fullfile(currentDir, '11095762/geometrical_complexity_shapefiles_v1'); % shapefile directory in folder 11095762
 
 %% load data
 % import FDHI data

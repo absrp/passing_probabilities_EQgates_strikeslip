@@ -11,7 +11,7 @@ currentDir = pwd;
 addpath(genpath(fullfile(currentDir, 'Source_code')));
 addpath(genpath(fullfile(currentDir, '11095762'))); % Zenodo repo data -- see required inputs above 
 
-shapefileDir = fullfile(currentDir, '11095762/primary_EQgate_shapefiles_v1'); % shapefile directory in folder 11095762
+shapefileDir = fullfile(currentDir, '11095762/geometrical_complexity_shapefiles_v1'); % shapefile directory in folder 11095762
 
 %% load data
 
