@@ -11,14 +11,14 @@ Propagating earthquakes must overcome geometrical complexity on fault networks t
 This repository contains the scripts required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of earthquake gates. The data required to run the scripts is provided in the following [Zenodo repository](https://zenodo.org/records/11095762) and listed below:
 
 - [ ] Data repository directories and content
-    - [ ] primary_EQgate_shapefiles_v1
+    - [ ] geometrical_complexity_shapefiles_v1
           Shapefiles of the zones of geometrical complexity mapped for each event. 
     - [ ] Regional_maps
           Shapefiles with the regional fault maps for each event.
     - [ ] FDHI_data
           Event information and displacement data for each event stored in excel file. Data from the FDHI database appendix. 
-    - [ ] event_kmz
-          kmz files and primary rupture shapefiles for each event in the FDHI database. Kmz files sourced from the FDHI database appendix. Shapefiles generated using the kzm2shp script. 
+    - [ ] event_rupture_shp
+          primary rupture shapefiles for each event in the FDHI database. Kmz files used to generate the shapefiles sourced from the FDHI database appendix. Shapefiles generated using the kzm2shp script. 
           
 Refer to the readme file in the Zenodo repository linked above for additional details. 
 
