@@ -52,7 +52,7 @@ conda activate EQ_gates
 
 Code link: [https://github.com/absrp/passing_probabilities_EQgates_strikeslip](https://github.com/absrp/passing_probabilities_EQgates_strikeslip)
 
-Data link: [https://zenodo.org/records/11095762](https://zenodo.org/records/11095762)
+Data link: [https://zenodo.org/records/12696715](https://zenodo.org/records/12696715)
 
 Manuscript link: under review
 [Pre-print link](https://essopenarchive.org/users/700353/articles/687281-the-influence-of-earthquake-gates-on-surface-rupture-length)
