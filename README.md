@@ -8,7 +8,7 @@ Propagating earthquakes must overcome geometrical complexity on fault networks t
 <!-- GETTING STARTED -->
 ## Data access
 
-This repository contains the scripts required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of earthquake gates. The data required to run the scripts is provided in the following [Zenodo repository](https://zenodo.org/records/11095762) and listed below:
+This repository contains the scripts required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of earthquake gates. The data required to run the scripts is provided in the following [Zenodo repository](https://zenodo.org/records/12696715) and listed below:
 
 - [ ] Data repository directories and content
     - [ ] geometrical_complexity_shapefiles_v1
@@ -18,7 +18,9 @@ This repository contains the scripts required to reproduce the results in Rodrig
     - [ ] FDHI_data
           Event information and displacement data for each event stored in excel file. Data from the FDHI database appendix. 
     - [ ] event_rupture_shp
-          primary rupture shapefiles for each event in the FDHI database. Kmz files used to generate the shapefiles sourced from the FDHI database appendix. Shapefiles generated using the kzm2shp script. 
+          primary rupture shapefiles for each event in the FDHI database. Kmz files used to generate the shapefiles sourced from the FDHI database appendix. Shapefiles generated using the kzm2shp script.
+      - [ ] event_rupture_shp
+          primary rupture shapefiles for each event in the FDHI database. Kmz files used to generate the shapefiles sourced from the FDHI database appendix. Shapefiles generated using the kzm2shp script.
           
 Refer to the readme file in the Zenodo repository linked above for additional details. 
 
@@ -35,7 +37,7 @@ conda activate EQ_gates
 
 ## Running the scripts: measuring fault geometry, estimating passing probabilities, and estimating event likelihood
 
-- [ ] To measure the geometry offeatures in a shapefile
+- [ ] To measure the geometry of features in a shapefile
     - [ ] Run the "measure_geometry.m" Matlab script. This will output a csv file with the characterized features (geometries.csv).
     - [ ] To measure the spacing between zones of geometrical complexity along a rupture, run the "gatespacing.m" script. This script produces a pdf output fitting log-normal, Weibull, and exponential CDFs to the ECDF of the feature spacings (supplemental Figure S6).
 
