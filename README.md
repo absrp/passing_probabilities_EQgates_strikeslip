@@ -8,7 +8,7 @@ Propagating earthquakes must overcome geometrical complexity on fault networks t
 <!-- GETTING STARTED -->
 ## Data access
 
-This repository contains the scripts required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of earthquake gates. The data required to run the scripts is provided in the following [Zenodo repository](https://zenodo.org/records/12696715) and listed below:
+This repository contains the scripts required to reproduce the results in Rodriguez Padilla et al. 202X, and to measure the geometry and passing probabilities of different types of geometrical complexity. The data required to run the scripts is provided in the following [Zenodo repository](https://zenodo.org/records/12696715) and listed below:
 
 - [ ] Data repository directories and content
     - [ ] geometrical_complexity_shapefiles_v1
