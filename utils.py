@@ -608,6 +608,14 @@ def kstest_variables(grouped, groupid, stress_typeYN, length_or_angle):
     elif length_or_angle == "angle":
         xvals_B = xvals_B["Length (m) or angle (deg)"]
         xvals_U = xvals_U["Length (m) or angle (deg)"]
+    
+    elif length_or_angle == "bend_length":
+        xvals_B = xvals_B["Double bend length (m)"]
+        xvals_U = xvals_U["Double bend length (m)"]
+    
+    elif length_or_angle == "bend_proxy_width":
+        xvals_B = xvals_B["Bend proxy step-over width (m)"]
+        xvals_U = xvals_U["Bend proxy step-over width (m)"]
 
     else:
         KeyError("Feature must include a length or an angle")
