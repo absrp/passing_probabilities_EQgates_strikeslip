@@ -200,6 +200,8 @@ plot(x, 1-fittedCDF_weibull, 'Color',[0.9294    0.6941    0.1255], 'LineWidth', 
 legend('Empirical CDF', 'log-normal', 'exponential', 'Weibull');
 xlim([0,12000])
 
+disp('Mean distance:')
+disp(mean(distances))
 % CDF gamma
 % params = gamfit(dist');
 % gamma_cdf = gamcdf(x, params(1), params(2)); % Use the estimated parameters
